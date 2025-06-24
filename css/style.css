@@ -84,23 +84,46 @@
 }
 
 .cards {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: center;
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
 	gap: var(--gap-main);
+	padding: 1em;
 }
 
-.card {
+.cardNoFound {
 	background-color: var(--glass);
 	box-shadow: var(--card-shadow);
 	border-radius: var(--radius);
 	padding: var(--gap-main);
-	height: 35vh;
+	height: 40vh;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	color: var(--text-main);
+}
+
+.cardFound {
+	background-color: var(--glass);
+	box-shadow: var(--card-shadow);
+	border-radius: var(--radius);
+	padding: var(--gap-main);
+	height: 40vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	color: var(--text-main);
+}
+
+.card-types {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+}
+
+.imagen-card {
+	width: 100%;
+	max-width: 6em;
 }
 
 .dialogCard {
@@ -142,11 +165,12 @@
 @media (max-width: 767px) {
 	.cards {
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: repeat(2, 1fr);
 		gap: var(--gap-main);
+		padding: 1em;
 	}
 
-	.card {
+	.cardNoFound {
 		background-color: var(--glass);
 		box-shadow: var(--card-shadow);
 		border-radius: var(--radius);
@@ -161,7 +185,7 @@
 	}
 
 	.navegador::-webkit-scrollbar {
-		display: none; /* Chrome, Safari y Opera */
+		display: none;
 	}
 }
 
