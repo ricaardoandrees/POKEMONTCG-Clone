@@ -175,12 +175,11 @@
 		box-shadow: var(--card-shadow);
 		border-radius: var(--radius);
 		padding: var(--gap-main);
-		height: 25vh;
 		color: var(--text-main);
 		width: 100%;
 		min-width: 0;
 		box-sizing: border-box;
-		height: 25vh;
+		height: 40vh;
 		margin: 0;
 	}
 

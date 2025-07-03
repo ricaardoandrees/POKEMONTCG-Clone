@@ -8,14 +8,6 @@ openDialog.addEventListener("click", () => {
 
 /*cargar los pokemon desde la API*/
 
-for (let j = 1; j <= 151; j++) {
-	if (j < 10) {
-		localStorage.setItem(j, false);
-	} else {
-		localStorage.setItem(j, true);
-	}
-}
-
 const pokemons = document.querySelector("#pokemons");
 const URL = "https://pokeapi.co/api/v2/pokemon/";
 
@@ -55,6 +47,7 @@ function mostrarPokemonEncontrado(data) {
 		<div class="card-types">
 			${data.types.map((type) => `<p>${type.type.name}</p>`).join("")}
 		</div>
+		<p>${data.abilities.map((ability) => ability.ability.name).join("<br>")}</p>
 	`;
 	pokemons.append(article);
 }
@@ -77,5 +70,5 @@ function mostrarPokemonEncontrado(data) {
 		<p>tipo</p>
 		<p>tipo</p>
 	</div>
-	<p>Description of card 1.</p>
+	<p>ataque.</p>
 </article>*/
