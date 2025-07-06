@@ -37,20 +37,30 @@
 					<li class="pokemon-type">Steel</li>
 					<li class="pokemon-type">Fairy</li>
 					<li class="pokemon-type">Fighting</li>
-					<li class="pokemon-type">Stellar</li>
-					<li class="pokemon-type">???</li>
+					<li class="pokemon-type">All</li>
 				</ul>
 			</nav>
 		</header>
 
 		<main>
 			<section id="pokemons" class="cards">
-				<dialog id="card-dialog" class="dialogCard" closeby="any">
+				<dialog id="card-dialog" class="dialogCard">
 					<div class="dialog-content">
-						<img src="img/card1.png" alt="Card 1" />
-						<h2>Card Name 1</h2>
-						<p>Description of card 1.</p>
-						<button class="close-button">Close</button>
+						<button class="close-button">X</button>
+						<img id="dialog-image" src="" alt="Pokemon Image" class="dialog-image">
+						<div class="dialog-info">
+							<h2 id="dialog-name"></h2>
+							<p id="dialog-id"></p>
+							<div class="dialog-types" id="dialog-types"></div>
+							<div class="dialog-stats">
+								<h3>Stats</h3>
+								<div id="dialog-stats"></div>
+							</div>
+							<div class="dialog-abilities">
+								<h3>Abilities</h3>
+								<div id="dialog-abilities"></div>
+							</div>
+						</div>
 					</div>
 				</dialog>
 			</section>

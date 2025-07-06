@@ -39,9 +39,17 @@
 }
 
 .index-header {
-	background-color: var(--glass);
-	backdrop-filter: blur(10px);
+  background-color: var(--glass);
+  backdrop-filter: blur(12px);
+  padding: 1.2em 2em;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  top: 0;
+  z-index: 10;
+  transition: all 0.3s ease;
+  animation: fadeInHeader 0.6s ease-out;
 }
+
 
 .titulo {
 	text-align: center;
@@ -57,6 +65,7 @@
 
 .navegador {
 	overflow-x: auto;
+	 overflow-y: hidden;
 }
 
 .pokemon-types-list {
@@ -162,6 +171,8 @@
 	padding: 0;
 }
 
+
+
 @media (max-width: 767px) {
 	.cards {
 		display: grid;
@@ -181,14 +192,119 @@
 		box-sizing: border-box;
 		height: 40vh;
 		margin: 0;
-	}
+	}s
 
 	.navegador::-webkit-scrollbar {
 		display: none;
 	}
 }
+/*efecto para al pasar el mouse cambie de color*/
+@keyframes tipoHoverEffect {
+  0% {
+    transform: scale(1);
+    background-color: #ada88e;
+    box-shadow: none;
+  }
+  100% {
+    transform: scale(1.1);
+    background-color: #b8ceac;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+  }
+}
 
-/*CSS PAGINA DE SOBRES*/
+.pokemon-type {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  cursor: pointer;
+  border-radius: 6px;
+  background-color: #f2f2f2;
+}
+
+.pokemon-type:hover {
+  animation: tipoHoverEffect 0.3s forwards;
+}
+
+/* efecto activo (después de hacer clic) */
+.pokemon-type.activo {
+  background-color: #b887b1;
+  color: white;
+  transform: scale(1.1);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+}
+/*CSS NUEVO*/
+.dialogCard {
+    border: none;
+    border-radius: 10px;
+    padding: 0;
+    max-width: 90%;
+    width: 500px;
+    background-color: white;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.dialogCard::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.dialog-content {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    position: relative;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.dialog-image {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+}
+
+.dialog-info {
+    margin-top: 20px;
+}
+
+.dialog-types {
+    display: flex;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.dialog-types p {
+    padding: 5px 10px;
+    border-radius: 20px;
+    color: white;
+    text-transform: capitalize;
+}
+
+.dialog-stats, .dialog-abilities {
+    margin-top: 15px;
+}
+
+.dialog-stats div, .dialog-abilities div {
+    margin-top: 5px;
+}
+
+.modal-type {
+  background-color: #b887b1;
+  color: white;
+  border-radius: 6px;
+  padding: 2px 6px;
+  margin-right: 4px;
+  font-weight: bold;
+  display: inline-block;
+}
+/*CSS PAGINA DE SOBRES
 
 .sobres {
 	display: flex;
@@ -226,3 +342,4 @@
 		color: white;
 	}
 }
+*/
