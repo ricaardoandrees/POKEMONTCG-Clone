@@ -20,7 +20,7 @@ class PokemonTCG {
     try {
       console.log("Cargando datos de Pokémon...")
 
-      // Cargar los primeros 151 Pokémon (Kanto)
+
       const promises = []
       for (let i = 1; i <= 151; i++) {
         promises.push(this.fetchPokemon(i))
@@ -61,7 +61,6 @@ class PokemonTCG {
     }
   }
 
-  // Datos de respaldo en caso de que falle la API
   getFallbackPokemon() {
     return [
       {
@@ -152,7 +151,7 @@ class PokemonTCG {
     return "common" // 65%
   }
 
-  // Renderizar sobres en la UI
+
   renderPacks() {
     const packsGrid = document.getElementById("packs-grid")
     packsGrid.innerHTML = ""
@@ -173,7 +172,7 @@ class PokemonTCG {
       }
     })
 
-    // Si no hay sobres disponibles
+
     if (this.availablePacks.every((pack) => pack.opened)) {
       packsGrid.innerHTML = `
                 <div style="grid-column: 1 / -1; text-align: center; color: var(--text-main); font-size: 1.2em;">
@@ -184,43 +183,43 @@ class PokemonTCG {
     }
   }
 
-  // Abrir un sobre con animaciones sencillas
+
   async openPack(pack) {
     this.currentOpeningPack = pack
     const modal = document.getElementById("pack-modal")
     const packAnimation = document.getElementById("pack-animation")
     const cardsReveal = document.getElementById("cards-reveal")
 
-    // Mostrar modal con fade in
+
     modal.classList.add("active")
     packAnimation.style.display = "block"
     cardsReveal.classList.remove("active")
 
-    // Simular apertura del sobre
+
     await this.sleep(1500)
 
-    // Fade out de la animación
+ 
     packAnimation.style.opacity = "0"
     await this.sleep(300)
     packAnimation.style.display = "none"
 
-    // Preparar las cartas y hacer fade in
+    /
     this.renderPackCards(pack.cards)
     cardsReveal.style.opacity = "0"
     cardsReveal.classList.add("active")
 
-    // Fade in de las cartas
+
     setTimeout(() => {
       cardsReveal.style.opacity = "1"
-    }, 50)
+    }, 25)
 
     // Reset para próxima vez
     packAnimation.style.opacity = "1"
 
-    // Agregar cartas a la colección
+
     this.addCardsToCollection(pack.cards)
 
-    // Marcar sobre como abierto
+
     pack.opened = true
 
     // Actualizar UI
@@ -228,7 +227,7 @@ class PokemonTCG {
     this.updateUI()
   }
 
-  // Renderizar cartas del sobre abierto con fade in
+  //  sobre abierto con fade in
   renderPackCards(cards) {
     const cardsReveal = document.getElementById("cards-reveal")
     cardsReveal.innerHTML = ""
@@ -275,7 +274,7 @@ class PokemonTCG {
     return owned
   }
 
-  // Actualizar UI
+  
   updateUI() {
     const ownedCount = Object.keys(this.ownedPokemon).length
     document.getElementById("card-count").textContent = ownedCount
@@ -325,19 +324,19 @@ class PokemonTCG {
 
   // Cambiar entre tabs
   switchTab(tabName) {
-    // Si es colección, redirigir a index.html
+   
     if (tabName === "collection") {
       window.location.href = "index.html"
       return
     }
 
-    // Actualizar botones
+    
     document.querySelectorAll(".tab-btn").forEach((btn) => {
       btn.classList.remove("active")
     })
     document.querySelector(`[data-tab="${tabName}"]`).classList.add("active")
 
-    // Actualizar contenido
+   
     document.querySelectorAll(".tab-content").forEach((content) => {
       content.classList.remove("active")
     })
