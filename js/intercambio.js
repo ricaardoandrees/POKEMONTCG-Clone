@@ -1,22 +1,24 @@
+// Variables globales
 const pokemons = document.querySelector("#pokemons");
 const pokemonsRival = document.querySelector("#pokemons-rival");
 const URL = "https://pokeapi.co/api/v2/pokemon/";
 
-let misCartas = []; // IDs de mis cartas
-let cartasOponente = []; // IDs de las cartas del oponente
+let misCartas = [];
+let cartasOponente = [];
 let cartaSeleccionada = null;
 let conectado = false;
 let ably = null;
 let channel = null;
+let oponenteConectado = false;
 
-// Verificar si Ably está disponible
-function verificarAbly() {
-    if (typeof Ably === 'undefined') {
-        console.error("Ably no está cargado");
-        mostrarError("Error: Servicio de intercambio no disponible");
-        return false;
-    }
-    return true;
+// ========== FUNCIONES DE UTILIDAD ==========
+
+function mostrarError(mensaje) {
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'notification error';
+    errorDiv.textContent = mensaje;
+    document.body.appendChild(errorDiv);
+    setTimeout(() => errorDiv.remove(), 3000);
 }
 
 function mostrarExito(mensaje) {
@@ -24,21 +26,7 @@ function mostrarExito(mensaje) {
     exitoDiv.className = 'notification success';
     exitoDiv.textContent = mensaje;
     document.body.appendChild(exitoDiv);
-    
-    setTimeout(() => {
-        exitoDiv.remove();
-    }, 3000);
-}
-
-function mostrarError(mensaje) {
-    const errorDiv = document.createElement('div');
-    errorDiv.className = 'notification error';
-    errorDiv.textContent = mensaje;
-    document.body.appendChild(errorDiv);
-    
-    setTimeout(() => {
-        errorDiv.remove();
-    }, 3000);
+    setTimeout(() => exitoDiv.remove(), 3000);
 }
 
 function actualizarEstadoConexion(estado) {
@@ -46,18 +34,10 @@ function actualizarEstadoConexion(estado) {
     if (estadoElement) {
         estadoElement.className = '';
         estadoElement.classList.add(estado);
-        
         switch(estado) {
-            case 'conectado':
-                estadoElement.textContent = '🟢 Conectado';
-                break;
-            case 'conectando':
-                estadoElement.textContent = '🟡 Conectando...';
-                break;
-            case 'desconectado':
-            default:
-                estadoElement.textContent = '🔴 Desconectado';
-                break;
+            case 'conectado': estadoElement.textContent = '🟢 Conectado'; break;
+            case 'conectando': estadoElement.textContent = '🟡 Conectando...'; break;
+            default: estadoElement.textContent = '🔴 Desconectado'; break;
         }
     }
 }
@@ -74,76 +54,56 @@ function actualizarCartaSeleccionada(pokemonId) {
     }
 }
 
+function actualizarBotones() {
+    const botonConectar = document.getElementById("conector");
+    const botonBuscar = document.getElementById("buscar-oponente");
+    const botonDesconectar = document.getElementById("desconectar");
+    const botonIntercambio = document.getElementById("intercambio");
+    
+    if (conectado) {
+        if (botonConectar) botonConectar.style.display = "none";
+        if (botonDesconectar) botonDesconectar.style.display = "inline-block";
+        
+        if (oponenteConectado) {
+            if (botonBuscar) botonBuscar.style.display = "none";
+            if (cartaSeleccionada && botonIntercambio) {
+                botonIntercambio.style.display = "inline-block";
+            } else if (botonIntercambio) {
+                botonIntercambio.style.display = "none";
+            }
+        } else {
+            if (botonBuscar) botonBuscar.style.display = "inline-block";
+            if (botonIntercambio) botonIntercambio.style.display = "none";
+        }
+    } else {
+        if (botonConectar) {
+            botonConectar.style.display = "inline-block";
+            botonConectar.disabled = false;
+            botonConectar.textContent = "🔗 Conectar al Servidor";
+        }
+        if (botonBuscar) botonBuscar.style.display = "none";
+        if (botonDesconectar) botonDesconectar.style.display = "none";
+        if (botonIntercambio) botonIntercambio.style.display = "none";
+    }
+}
+
+// ========== FUNCIONES DE POKÉMON ==========
+
 function cargarPokemons() {
     misCartas = [];
-    pokemons.innerHTML = '<h2>Mis Cartas Disponibles</h2><p>Cargando cartas...</p>';
-    
-    let cartasCargadas = 0;
-    const totalCartas = 151;
+    pokemons.innerHTML = '<h2>Mis Cartas Disponibles</h2>';
     
     for (let i = 1; i <= 151; i++) {
         fetch(URL + i)
             .then((response) => response.json())
             .then((data) => {
-                cartasCargadas++;
-                
-                // Corregir la lógica aquí también
                 if (localStorage.getItem(i) === "true") {
                     misCartas.push(i);
                     mostrarPokemonDisponible(data);
                 }
-                
-                // Verificar si terminamos de cargar todas las cartas
-                if (cartasCargadas === totalCartas) {
-                    finalizarCargaCartas();
-                }
             })
-            .catch((error) => {
-                console.error(`Error cargando Pokémon ${i}:`, error);
-                cartasCargadas++;
-                
-                // Verificar si terminamos incluso con errores
-                if (cartasCargadas === totalCartas) {
-                    finalizarCargaCartas();
-                }
-            });
+            .catch((error) => console.error(`Error cargando Pokémon ${i}:`, error));
     }
-}
-
-function finalizarCargaCartas() {
-    // Limpiar mensaje de carga
-    const mensajeCarga = pokemons.querySelector('p');
-    if (mensajeCarga && mensajeCarga.textContent === 'Cargando cartas...') {
-        mensajeCarga.remove();
-    }
-    
-    console.log("Mis cartas cargadas:", misCartas);
-    
-    // Verificar si realmente no hay cartas después de cargar
-    if (misCartas.length === 0) {
-        pokemons.innerHTML += '<p style="text-align: center; color: #666; padding: 20px;">No tienes cartas disponibles para intercambiar.<br><a href="index.html" style="color: #4a90e2;">Ve a la colección</a> para obtener cartas primero.</p>';
-        console.log("❌ No hay cartas disponibles para intercambio");
-        
-        // Verificar si hay cartas en localStorage pero no se cargaron
-        let cartasEnStorage = 0;
-        for (let i = 1; i <= 151; i++) {
-            if (localStorage.getItem(i) === "true") {
-                cartasEnStorage++;
-            }
-        }
-        
-        if (cartasEnStorage > 0) {
-            console.log(`⚠️ Hay ${cartasEnStorage} cartas en localStorage pero no se cargaron desde la API`);
-            mostrarError(`Error: Hay ${cartasEnStorage} cartas guardadas pero no se pudieron cargar. Verifica tu conexión a internet.`);
-        }
-    } else {
-        console.log(`✅ ${misCartas.length} cartas cargadas correctamente`);
-        mostrarExito(`${misCartas.length} cartas disponibles para intercambio`);
-    }
-}
-
-function cargarPokemonsRivales() {
-    pokemonsRival.innerHTML = '<h2>Buscando oponente...</h2>';
 }
 
 function mostrarPokemonDisponible(pokemon) {
@@ -151,7 +111,6 @@ function mostrarPokemonDisponible(pokemon) {
     carta.classList.add("carta");
     carta.dataset.id = pokemon.id;
     
-    // Agregar clase si está seleccionada
     if (cartaSeleccionada === pokemon.id) {
         carta.classList.add("sombra");
     }
@@ -179,270 +138,324 @@ function mostrarPokemonRivalesDisponible(pokemon) {
 
 function mostrarCartasOponente(cartasIds) {
     pokemonsRival.innerHTML = "<h2>Cartas del Oponente</h2>";
+    oponenteConectado = true;
+    actualizarBotones();
 
     cartasIds.forEach((id) => {
         fetch(URL + id)
             .then((response) => response.json())
-            .then((data) => {
-                mostrarPokemonRivalesDisponible(data);
-            })
-            .catch((error) => {
-                console.error(`Error cargando carta rival ${id}:`, error);
-            });
+            .then((data) => mostrarPokemonRivalesDisponible(data))
+            .catch((error) => console.error(`Error cargando carta rival ${id}:`, error));
     });
 }
 
 function seleccionarCarta(pokemonId) {
-    // Remover selección anterior
-    document.querySelectorAll('.carta').forEach(carta => {
-        carta.classList.remove('sombra');
-    });
+    document.querySelectorAll('.carta').forEach(carta => carta.classList.remove('sombra'));
     
-    // Seleccionar nueva carta
     cartaSeleccionada = pokemonId;
     const cartaElement = document.querySelector(`[data-id="${pokemonId}"]`);
-    if (cartaElement) {
-        cartaElement.classList.add('sombra');
-    }
+    if (cartaElement) cartaElement.classList.add('sombra');
     
-    console.log(`Carta seleccionada: #${pokemonId}`);
-    
-    // Actualizar UI
     actualizarCartaSeleccionada(pokemonId);
-    
-    // Mostrar botón de intercambio solo si está conectado
-    const botonIntercambio = document.getElementById("intercambio");
-    if (conectado && botonIntercambio) {
-        botonIntercambio.style.display = "block";
-    }
-    
+    actualizarBotones();
     mostrarExito(`Carta #${pokemonId} seleccionada`);
 }
 
-// Mejorar el manejo de conexión
-document.getElementById("conector").addEventListener("click", function () {
-    if (!verificarAbly()) {
-        return;
-    }
-    
-    // Deshabilitar el botón y mostrar estado
-    this.disabled = true;
-    this.innerHTML = '<span class="loading"></span> Conectando...';
-    actualizarEstadoConexion('conectando');
-    
-    cargarPokemonsRivales();
+// ========== FUNCIONES DE CONEXIÓN ==========
 
-    try {
-        // Usar una API key de prueba o temporal
-        ably = new Ably.Realtime({
-            key: "uqRJZg.KHwvcQ:4pn-u1lwqY4mjeUUm-A2zyX3bK7ZS1U_XwTgrHIZ_DU",
-            clientId: 'player_' + Math.random().toString(36).substr(2, 9)
-        });
-        
-        channel = ably.channels.get("canal-intercambio");
-
-        ably.connection.on("connected", () => {
-            console.log("Conectado a Ably");
-            conectado = true;
-            this.style.display = "none";
-            actualizarEstadoConexion('conectado');
-            mostrarExito("Conectado al servidor de intercambios");
-
-            // Enviar cartas disponibles
-            channel.publish("jugador_conectado", {
-                jugadorId: ably.auth.clientId,
-                cartas: misCartas,
-            });
-        });
-
-        ably.connection.on("failed", () => {
-            console.error("Error de conexión con Ably");
-            mostrarError("No se pudo conectar al servidor");
-            actualizarEstadoConexion('desconectado');
-            this.disabled = false;
-            this.textContent = "🔗 Conectar al Servidor";
-        });
-
-        ably.connection.on("disconnected", () => {
-            console.log("Desconectado del servidor");
-            conectado = false;
-            actualizarEstadoConexion('desconectado');
-        });
-
-        // Escuchar eventos
-        channel.subscribe("actualizar_lista", (mensaje) => {
-            if (mensaje.data.jugadorId !== ably.auth.clientId) {
-                cartasOponente = mensaje.data.cartas;
-                mostrarCartasOponente(cartasOponente);
-                console.log("📋 Lista de oponente actualizada:", cartasOponente);
-            }
-        });
-
-        channel.subscribe("jugador_conectado", (mensaje) => {
-            if (mensaje.data.jugadorId !== ably.auth.clientId) {
-                cartasOponente = mensaje.data.cartas;
-                mostrarCartasOponente(cartasOponente);
-                mostrarExito("¡Oponente encontrado!");
-                console.log("🎮 Oponente conectado con cartas:", cartasOponente);
-                
-                // Enviar mis cartas de vuelta para sincronización
-                setTimeout(() => {
-                    channel.publish("actualizar_lista", {
-                        jugadorId: ably.auth.clientId,
-                        cartas: misCartas,
-                    });
-                }, 500);
-            }
-        });
-
-        // Escuchar ofertas del oponente
-        channel.subscribe("oferta_carta", (mensaje) => {
-            if (mensaje.data.jugadorId !== ably.auth.clientId) {
-                const { cartaId } = mensaje.data;
-                console.log(`📨 Oferta recibida: carta #${cartaId}`);
-                
-                const confirmacion = confirm(
-                    `¿Aceptas intercambiar tu carta seleccionada (#${cartaSeleccionada || 'ninguna'}) por la carta #${cartaId} del oponente?`
-                );
-
-                if (confirmacion && cartaSeleccionada) {
-                    console.log(`✅ Aceptando intercambio: Doy #${cartaSeleccionada}, recibo #${cartaId}`);
-                    
-                    channel.publish("aceptar_intercambio", {
-                        jugadorId: ably.auth.clientId,
-                        miCarta: cartaSeleccionada,
-                        cartaOponente: cartaId,
-                        timestamp: Date.now()
-                    });
-                    
-                    // Realizar intercambio inmediatamente
-                    actualizarMazos(cartaId, cartaSeleccionada);
-                    
-                } else {
-                    console.log("❌ Intercambio rechazado");
-                    channel.publish("cancelar_intercambio", {
-                        jugadorId: ably.auth.clientId,
-                    });
-                }
-            }
-        });
-
-        // Escuchar confirmación del oponente
-        channel.subscribe("aceptar_intercambio", (mensaje) => {
-            if (mensaje.data.jugadorId !== ably.auth.clientId) {
-                console.log("🎉 Intercambio confirmado por oponente:", mensaje.data);
-                
-                const cartaRecibida = mensaje.data.miCarta; // La carta que el oponente me da
-                const cartaEntregada = mensaje.data.cartaOponente; // La carta que yo di (debería ser mi cartaSeleccionada)
-                
-                mostrarExito(`¡Intercambio exitoso! Recibiste carta #${cartaRecibida}`);
-                
-                // Solo actualizar si no se ha hecho ya (evitar duplicados)
-                if (localStorage.getItem(cartaEntregada) === "true") {
-                    actualizarMazos(cartaRecibida, cartaEntregada);
-                }
-            }
-        });
-
-        channel.subscribe("cancelar_intercambio", (mensaje) => {
-            if (mensaje.data.jugadorId !== ably.auth.clientId) {
-                mostrarError("El oponente canceló el intercambio");
-            }
-        });
-
-    } catch (error) {
-        console.error("Error al conectar:", error);
-        mostrarError("Error al conectar: " + error.message);
-        actualizarEstadoConexion('desconectado');
-        this.disabled = false;
-        this.textContent = "🔗 Conectar al Servidor";
-    }
-});
-
-// Manejar el botón de intercambio
-document.getElementById("intercambio").addEventListener("click", function () {
-    if (!conectado) {
+function buscarOponente() {
+    if (!conectado || !channel) {
         mostrarError("No estás conectado al servidor");
         return;
     }
     
-    if (!cartaSeleccionada) {
-        mostrarError("Selecciona una carta primero");
-        return;
-    }
+    console.log("🔍 Buscando oponente...");
+    pokemonsRival.innerHTML = '<h2>🔍 Buscando oponente...</h2>';
+    oponenteConectado = false;
+    cartasOponente = [];
     
-    if (cartasOponente.length === 0) {
-        mostrarError("No hay oponente conectado");
-        return;
-    }
-
-    console.log(`📤 Enviando oferta: carta #${cartaSeleccionada}`);
-    
-    // Enviar oferta
-    channel.publish("oferta_carta", {
+    channel.publish("jugador_conectado", {
         jugadorId: ably.auth.clientId,
-        cartaId: cartaSeleccionada,
+        cartas: misCartas,
         timestamp: Date.now()
     });
     
-    mostrarExito(`Oferta enviada: Carta #${cartaSeleccionada}`);
-    this.style.display = "none"; // Ocultar hasta nueva selección
-});
+    actualizarBotones();
+    mostrarExito("Buscando oponente...");
+    
+    setTimeout(() => {
+        if (!oponenteConectado) {
+            pokemonsRival.innerHTML = '<h2>❌ No se encontró oponente</h2>';
+        }
+    }, 5000);
+}
 
-// Función para actualizar mazos
+function desconectar() {
+    console.log("🚪 Desconectando...");
+    
+    // ENVIAR NOTIFICACIÓN AL OPONENTE ANTES DE DESCONECTAR
+    if (channel && ably && conectado) {
+        channel.publish("jugador_desconectado", {
+            jugadorId: ably.auth.clientId,
+            timestamp: Date.now()
+        });
+        console.log("📡 Notificación de desconexión enviada");
+    }
+    
+    // ESPERAR UN MOMENTO Y LUEGO DESCONECTAR
+    setTimeout(() => {
+        // Cerrar Ably
+        if (ably) {
+            ably.connection.close();
+            ably = null;
+        }
+        
+        // Resetear estado
+        conectado = false;
+        oponenteConectado = false;
+        cartasOponente = [];
+        cartaSeleccionada = null;
+        channel = null;
+        
+        // Limpiar UI
+        actualizarEstadoConexion('desconectado');
+        actualizarCartaSeleccionada(null);
+        pokemonsRival.innerHTML = '<h2>Desconectado</h2>';
+        
+        document.querySelectorAll('.carta').forEach(carta => carta.classList.remove('sombra'));
+        actualizarBotones();
+        
+        mostrarExito("Desconectado del servidor");
+        console.log("✅ Desconectado completamente");
+    }, 300);
+}
+
 function actualizarMazos(cartaRecibida, cartaEntregada) {
-    // Actualizar localStorage
     localStorage.setItem(cartaEntregada, "false");
     localStorage.setItem(cartaRecibida, "true");
-
     
     misCartas = misCartas.filter((id) => id !== cartaEntregada);
     misCartas.push(parseInt(cartaRecibida));
 
-   
     cargarPokemons();
     cartaSeleccionada = null;
-    document.getElementById("intercambio").style.display = "none";
+    actualizarCartaSeleccionada(null);
+    actualizarBotones();
 
-    // Notificar al oponente
     if (channel) {
-        channel.publish("actualizar_lista", {
-            jugadorId: ably.auth.clientId,
-            cartas: misCartas,
-        });
+        setTimeout(() => {
+            channel.publish("actualizar_lista", {
+                jugadorId: ably.auth.clientId,
+                cartas: misCartas,
+            });
+        }, 500);
     }
 }
 
-// Inicializar cuando carga la página
+// ========== CONFIGURACIÓN DE EVENTOS ==========
+
+function configurarEventosAbly() {
+    // Conexión establecida
+    ably.connection.on("connected", () => {
+        console.log("Conectado a Ably");
+        conectado = true;
+        actualizarEstadoConexion('conectado');
+        actualizarBotones();
+        mostrarExito("Conectado al servidor");
+    });
+
+    // Error de conexión
+    ably.connection.on("failed", () => {
+        console.error("Error de conexión");
+        mostrarError("No se pudo conectar");
+        actualizarEstadoConexion('desconectado');
+        actualizarBotones();
+    });
+
+    // Desconexión inesperada
+    ably.connection.on("disconnected", () => {
+        console.log("Desconectado inesperadamente");
+        conectado = false;
+        oponenteConectado = false;
+        actualizarEstadoConexion('desconectado');
+        actualizarBotones();
+    });
+}
+
+function configurarEventosCanal() {
+    // Jugador conectado
+    channel.subscribe("jugador_conectado", (mensaje) => {
+        if (mensaje.data.jugadorId !== ably.auth.clientId) {
+            console.log("🎮 Oponente encontrado:", mensaje.data.jugadorId);
+            cartasOponente = mensaje.data.cartas;
+            mostrarCartasOponente(cartasOponente);
+            mostrarExito("¡Oponente encontrado!");
+            
+            // Responder con mis cartas
+            setTimeout(() => {
+                channel.publish("actualizar_lista", {
+                    jugadorId: ably.auth.clientId,
+                    cartas: misCartas,
+                });
+            }, 500);
+        }
+    });
+
+    // Lista actualizada
+    channel.subscribe("actualizar_lista", (mensaje) => {
+        if (mensaje.data.jugadorId !== ably.auth.clientId) {
+            cartasOponente = mensaje.data.cartas;
+            mostrarCartasOponente(cartasOponente);
+        }
+    });
+
+    // Jugador desconectado
+    channel.subscribe("jugador_desconectado", (mensaje) => {
+        if (mensaje.data.jugadorId !== ably.auth.clientId) {
+            console.log("🔌 Oponente desconectado:", mensaje.data.jugadorId);
+            
+            oponenteConectado = false;
+            cartasOponente = [];
+            
+            pokemonsRival.innerHTML = '<h2>🔌 Oponente desconectado</h2><p style="text-align: center; color: #666;">El otro jugador se desconectó.</p>';
+            
+            if (cartaSeleccionada) {
+                document.querySelectorAll('.carta').forEach(carta => carta.classList.remove('sombra'));
+                cartaSeleccionada = null;
+                actualizarCartaSeleccionada(null);
+            }
+            
+            actualizarBotones();
+            mostrarError("El oponente se desconectó");
+        }
+    });
+
+    // Oferta de carta
+    channel.subscribe("oferta_carta", (mensaje) => {
+        if (mensaje.data.jugadorId !== ably.auth.clientId) {
+            const { cartaId } = mensaje.data;
+            const confirmacion = confirm(
+                `¿Aceptas intercambiar tu carta (#${cartaSeleccionada || 'ninguna'}) por la carta #${cartaId}?`
+            );
+
+            if (confirmacion && cartaSeleccionada) {
+                channel.publish("aceptar_intercambio", {
+                    jugadorId: ably.auth.clientId,
+                    miCarta: cartaSeleccionada,
+                    cartaOponente: cartaId
+                });
+                actualizarMazos(cartaId, cartaSeleccionada);
+            } else {
+                channel.publish("cancelar_intercambio", {
+                    jugadorId: ably.auth.clientId,
+                });
+            }
+        }
+    });
+
+    // Intercambio aceptado
+    channel.subscribe("aceptar_intercambio", (mensaje) => {
+        if (mensaje.data.jugadorId !== ably.auth.clientId) {
+            const cartaRecibida = mensaje.data.miCarta;
+            const cartaEntregada = mensaje.data.cartaOponente;
+            mostrarExito(`¡Intercambio exitoso! Recibiste carta #${cartaRecibida}`);
+            if (localStorage.getItem(cartaEntregada) === "true") {
+                actualizarMazos(cartaRecibida, cartaEntregada);
+            }
+        }
+    });
+
+    // Intercambio cancelado
+    channel.subscribe("cancelar_intercambio", (mensaje) => {
+        if (mensaje.data.jugadorId !== ably.auth.clientId) {
+            mostrarError("El oponente rechazó el intercambio");
+        }
+    });
+}
+
+// ========== EVENT LISTENERS DE BOTONES ==========
+
 document.addEventListener("DOMContentLoaded", () => {
-    // verificar si hay cartas en localStorage
+    // Inicializar cartas si no existen
     let cartasEnStorage = 0;
     for (let i = 1; i <= 151; i++) {
-        if (localStorage.getItem(i) === "true") {
-            cartasEnStorage++;
-        }
+        if (localStorage.getItem(i) === "true") cartasEnStorage++;
     }
     
-    console.log(`📦 Cartas encontradas en localStorage: ${cartasEnStorage}`);
-    
-   /* if (cartasEnStorage === 0) {
-        // inicializar algunas cartas para testing
-        console.log(" No hay cartas en localStorage, inicializando cartas de prueba...");
+    if (cartasEnStorage === 0) {
         const cartasPrueba = [1, 4, 7, 25, 150, 6, 9, 131];
-        
-        cartasPrueba.forEach(id => {
-            localStorage.setItem(id, "true");
-        });
-        
+        cartasPrueba.forEach(id => localStorage.setItem(id, "true"));
         localStorage.setItem('initialized', 'true');
-        mostrarExito(`Se inicializaron ${cartasPrueba.length} cartas de prueba`);
-    }*/
+        mostrarExito(`${cartasPrueba.length} cartas de prueba inicializadas`);
+    }
     
-    // Cargar cartas
     cargarPokemons();
     actualizarEstadoConexion('desconectado');
-    document.getElementById("conector").style.display = "block";
-    document.getElementById("intercambio").style.display = "none";
+    actualizarBotones();
+    
+    // Botón conectar
+    document.getElementById("conector").addEventListener("click", function () {
+        if (typeof Ably === 'undefined') {
+            mostrarError("Ably no disponible");
+            return;
+        }
+        
+        this.disabled = true;
+        this.textContent = "Conectando...";
+        actualizarEstadoConexion('conectando');
+
+        try {
+            ably = new Ably.Realtime({
+                key: "uqRJZg.KHwvcQ:4pn-u1lwqY4mjeUUm-A2zyX3bK7ZS1U_XwTgrHIZ_DU",
+                clientId: 'player_' + Math.random().toString(36).substr(2, 9)
+            });
+            
+            channel = ably.channels.get("canal-intercambio");
+            
+            configurarEventosAbly();
+            configurarEventosCanal();
+            
+        } catch (error) {
+            console.error("Error conectando:", error);
+            mostrarError("Error de conexión");
+            actualizarEstadoConexion('desconectado');
+            this.disabled = false;
+            this.textContent = "🔗 Conectar al Servidor";
+        }
+    });
+
+    // Botón buscar oponente
+    const botonBuscar = document.getElementById("buscar-oponente");
+    if (botonBuscar) {
+        botonBuscar.onclick = buscarOponente;
+    }
+
+    // Botón desconectar
+    const botonDesconectar = document.getElementById("desconectar");
+    if (botonDesconectar) {
+        botonDesconectar.onclick = desconectar;
+    }
+
+    // Botón intercambio
+    document.getElementById("intercambio").addEventListener("click", function () {
+        if (!conectado || !cartaSeleccionada || !oponenteConectado) {
+            mostrarError("Verifica: conexión, carta seleccionada y oponente");
+            return;
+        }
+
+        channel.publish("oferta_carta", {
+            jugadorId: ably.auth.clientId,
+            cartaId: cartaSeleccionada
+        });
+        
+        mostrarExito(`Oferta enviada: Carta #${cartaSeleccionada}`);
+        this.style.display = "none";
+    });
     
     console.log("Sistema de intercambio cargado");
 });
+
+// Funciones globales para debug
+window.buscarOponente = buscarOponente;
+window.desconectar = desconectar;
+window.actualizarBotones = actualizarBotones;

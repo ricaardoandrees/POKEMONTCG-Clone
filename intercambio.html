@@ -11,13 +11,13 @@
         <!-- Título principal -->
         <h1 class="titulo">Intercambio de Cartas</h1>
         
-       
+        <!-- Contenedor de mis cartas -->
         <section class="contenedor-personal" id="pokemons">
             <h2>Mis Cartas Disponibles</h2>
-           
+            <!-- Las cartas se cargarán aquí dinámicamente -->
         </section>
         
-       
+        <!-- Imagen de intercambio -->
         <section class="contenedor-imagen">
             <img
                 src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png"
@@ -32,10 +32,18 @@
             <!-- Las cartas del rival se cargarán aquí -->
         </section>
         
-        
+        <!-- Botones de control -->
         <div class="controles">
             <button class="boton" id="conector">
                 🔗 Conectar al Servidor
+            </button>
+            
+            <button class="boton boton-secundario" id="buscar-oponente" style="display: none;">
+                🔍 Buscar Oponente
+            </button>
+            
+            <button class="boton boton-desconectar" id="desconectar" style="display: none;">
+                🚪 Desconectar
             </button>
             
             <button class="boton" id="intercambio" style="display: none;">

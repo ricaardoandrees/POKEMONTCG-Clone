@@ -160,6 +160,23 @@
     transform: none;
 }
 
+.boton-secundario {
+    background: linear-gradient(45deg, #ffc107, #e0a800);
+    color: #333;
+}
+
+.boton-secundario:hover {
+    background: linear-gradient(45deg, #e0a800, #d39e00);
+}
+
+.boton-desconectar {
+    background: linear-gradient(45deg, #dc3545, #c82333);
+}
+
+.boton-desconectar:hover {
+    background: linear-gradient(45deg, #c82333, #bd2130);
+}
+
 #intercambio {
     background: linear-gradient(45deg, var(--success-color), #218838);
     animation: pulse 2s infinite;
