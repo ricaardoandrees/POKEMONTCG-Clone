@@ -395,11 +395,11 @@ function actualizarMazos(cartaRecibida, cartaEntregada) {
     localStorage.setItem(cartaEntregada, "false");
     localStorage.setItem(cartaRecibida, "true");
 
-    // Actualizar listas locales
+    
     misCartas = misCartas.filter((id) => id !== cartaEntregada);
     misCartas.push(parseInt(cartaRecibida));
 
-    // Actualizar UI
+   
     cargarPokemons();
     cartaSeleccionada = null;
     document.getElementById("intercambio").style.display = "none";
@@ -415,7 +415,7 @@ function actualizarMazos(cartaRecibida, cartaEntregada) {
 
 // Inicializar cuando carga la página
 document.addEventListener("DOMContentLoaded", () => {
-    // Primero verificar si hay cartas en localStorage
+    // verificar si hay cartas en localStorage
     let cartasEnStorage = 0;
     for (let i = 1; i <= 151; i++) {
         if (localStorage.getItem(i) === "true") {
@@ -425,9 +425,9 @@ document.addEventListener("DOMContentLoaded", () => {
     
     console.log(`📦 Cartas encontradas en localStorage: ${cartasEnStorage}`);
     
-    if (cartasEnStorage === 0) {
-        // Si no hay cartas, inicializar algunas para testing
-        console.log("⚠️ No hay cartas en localStorage, inicializando cartas de prueba...");
+   /* if (cartasEnStorage === 0) {
+        // inicializar algunas cartas para testing
+        console.log(" No hay cartas en localStorage, inicializando cartas de prueba...");
         const cartasPrueba = [1, 4, 7, 25, 150, 6, 9, 131];
         
         cartasPrueba.forEach(id => {
@@ -436,7 +436,7 @@ document.addEventListener("DOMContentLoaded", () => {
         
         localStorage.setItem('initialized', 'true');
         mostrarExito(`Se inicializaron ${cartasPrueba.length} cartas de prueba`);
-    }
+    }*/
     
     // Cargar cartas
     cargarPokemons();
