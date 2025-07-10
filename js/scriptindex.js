@@ -6,7 +6,7 @@ const URL = "https://pokeapi.co/api/v2/pokemon/";
 const datosPokemons = [];
 
 
-//Para poder filtrar y buscar.
+
 const inputBuscador = document.querySelector(".buscador");
 //Filtrar tipos
 const tipoItems = document.querySelectorAll(".pokemon-type");
