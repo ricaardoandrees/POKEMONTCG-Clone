@@ -292,20 +292,20 @@ class PokemonTCG {
       })
     })
 
-    // Generar nuevos sobres
+    
     document.getElementById("generate-packs").addEventListener("click", () => {
       this.generatePacks()
     })
 
-    // Cerrar modal
+    // close modal si cliqueo afuera
     document.getElementById("close-modal").addEventListener("click", () => {
       document.getElementById("pack-modal").classList.remove("active")
     })
 
-    // Limpiar colección
+    // limpiar cole
     document.getElementById("clear-collection").addEventListener("click", () => {
       if (confirm("¿Estás seguro de que quieres limpiar tu colección?")) {
-        // Limpiar cada Pokémon individualmente del localStorage
+       
         Object.keys(this.ownedPokemon).forEach((pokemonId) => {
           localStorage.removeItem(pokemonId.toString())
         })
