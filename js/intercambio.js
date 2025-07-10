@@ -274,6 +274,7 @@ document.getElementById("conector").addEventListener("click", function () {
             if (mensaje.data.jugadorId !== ably.auth.clientId) {
                 cartasOponente = mensaje.data.cartas;
                 mostrarCartasOponente(cartasOponente);
+                console.log("📋 Lista de oponente actualizada:", cartasOponente);
             }
         });
 
@@ -282,6 +283,15 @@ document.getElementById("conector").addEventListener("click", function () {
                 cartasOponente = mensaje.data.cartas;
                 mostrarCartasOponente(cartasOponente);
                 mostrarExito("¡Oponente encontrado!");
+                console.log("🎮 Oponente conectado con cartas:", cartasOponente);
+                
+                // Enviar mis cartas de vuelta para sincronización
+                setTimeout(() => {
+                    channel.publish("actualizar_lista", {
+                        jugadorId: ably.auth.clientId,
+                        cartas: misCartas,
+                    });
+                }, 500);
             }
         });
 
@@ -289,17 +299,27 @@ document.getElementById("conector").addEventListener("click", function () {
         channel.subscribe("oferta_carta", (mensaje) => {
             if (mensaje.data.jugadorId !== ably.auth.clientId) {
                 const { cartaId } = mensaje.data;
+                console.log(`📨 Oferta recibida: carta #${cartaId}`);
+                
                 const confirmacion = confirm(
-                    `¿Aceptas intercambiar tu carta seleccionada por #${cartaId}?`
+                    `¿Aceptas intercambiar tu carta seleccionada (#${cartaSeleccionada || 'ninguna'}) por la carta #${cartaId} del oponente?`
                 );
 
                 if (confirmacion && cartaSeleccionada) {
+                    console.log(`✅ Aceptando intercambio: Doy #${cartaSeleccionada}, recibo #${cartaId}`);
+                    
                     channel.publish("aceptar_intercambio", {
                         jugadorId: ably.auth.clientId,
-                        cartaId: cartaSeleccionada,
-                        cartaRecibida: cartaId
+                        miCarta: cartaSeleccionada,
+                        cartaOponente: cartaId,
+                        timestamp: Date.now()
                     });
+                    
+                    // Realizar intercambio inmediatamente
+                    actualizarMazos(cartaId, cartaSeleccionada);
+                    
                 } else {
+                    console.log("❌ Intercambio rechazado");
                     channel.publish("cancelar_intercambio", {
                         jugadorId: ably.auth.clientId,
                     });
@@ -310,8 +330,17 @@ document.getElementById("conector").addEventListener("click", function () {
         // Escuchar confirmación del oponente
         channel.subscribe("aceptar_intercambio", (mensaje) => {
             if (mensaje.data.jugadorId !== ably.auth.clientId) {
-                mostrarExito(`¡Intercambio exitoso! Recibiste #${mensaje.data.cartaId}`);
-                actualizarMazos(mensaje.data.cartaId, cartaSeleccionada);
+                console.log("🎉 Intercambio confirmado por oponente:", mensaje.data);
+                
+                const cartaRecibida = mensaje.data.miCarta; // La carta que el oponente me da
+                const cartaEntregada = mensaje.data.cartaOponente; // La carta que yo di (debería ser mi cartaSeleccionada)
+                
+                mostrarExito(`¡Intercambio exitoso! Recibiste carta #${cartaRecibida}`);
+                
+                // Solo actualizar si no se ha hecho ya (evitar duplicados)
+                if (localStorage.getItem(cartaEntregada) === "true") {
+                    actualizarMazos(cartaRecibida, cartaEntregada);
+                }
             }
         });
 
@@ -347,10 +376,13 @@ document.getElementById("intercambio").addEventListener("click", function () {
         return;
     }
 
+    console.log(`📤 Enviando oferta: carta #${cartaSeleccionada}`);
+    
     // Enviar oferta
     channel.publish("oferta_carta", {
         jugadorId: ably.auth.clientId,
-        cartaId: cartaSeleccionada
+        cartaId: cartaSeleccionada,
+        timestamp: Date.now()
     });
     
     mostrarExito(`Oferta enviada: Carta #${cartaSeleccionada}`);
