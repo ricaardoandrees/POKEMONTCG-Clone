@@ -149,27 +149,7 @@
 	left: 50%;
 }
 
-.footer-index {
-	z-index: 2;
-	left: 0;
-	bottom: 0;
-	position: fixed;
-	background-color: var(--footer-bg);
-	width: 100vw;
-	padding: var(--gap-main);
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	color: var(--text-main);
-}
 
-.footer-nav,
-.footer-links {
-	list-style: none;
-	display: flex;
-	gap: var(--gap-main);
-	padding: 0;
-}
 
 
 

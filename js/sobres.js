@@ -61,47 +61,6 @@ class PokemonTCG {
     }
   }
 
-  getFallbackPokemon() {
-    return [
-      {
-        id: 1,
-        name: "bulbasaur",
-        image: "/placeholder.svg?height=150&width=150",
-        types: ["grass", "poison"],
-        height: 7,
-        weight: 69,
-        stats: [
-          { name: "hp", value: 45 },
-          { name: "attack", value: 49 },
-        ],
-      },
-      {
-        id: 4,
-        name: "charmander",
-        image: "/placeholder.svg?height=150&width=150",
-        types: ["fire"],
-        height: 6,
-        weight: 85,
-        stats: [
-          { name: "hp", value: 39 },
-          { name: "attack", value: 52 },
-        ],
-      },
-      {
-        id: 7,
-        name: "squirtle",
-        image: "/placeholder.svg?height=150&width=150",
-        types: ["water"],
-        height: 5,
-        weight: 90,
-        stats: [
-          { name: "hp", value: 44 },
-          { name: "attack", value: 48 },
-        ],
-      },
-    ]
-  }
-
   // Generar 3 sobres con 6 cartas cada uno
   generatePacks() {
     this.availablePacks = []
@@ -128,7 +87,7 @@ class PokemonTCG {
         const randomIndex = Math.floor(Math.random() * this.pokemonData.length)
         const pokemon = this.pokemonData[randomIndex]
 
-        // Crear carta con rareza aleatoria
+        
         const rarity = this.getRandomRarity()
 
         cards.push({
@@ -145,9 +104,9 @@ class PokemonTCG {
   // Sistema de rareza
   getRandomRarity() {
     const rand = Math.random()
-    if (rand < 0.05) return "legendary" // 5%
-    if (rand < 0.15) return "rare" // 10%
-    if (rand < 0.35) return "uncommon" // 20%
+    if (rand < 0.05) return "legendary" 
+    if (rand < 0.15) return "rare" 
+    if (rand < 0.35) return "uncommon" 
     return "common" // 65%
   }
 

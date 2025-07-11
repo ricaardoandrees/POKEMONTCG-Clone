@@ -482,6 +482,8 @@ header h1 {
   background-color: #ee99ac;
 }
 
+
+
 /* Media Queries */
 @media (max-width: 767px) {
   .container {
