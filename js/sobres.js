@@ -1,3 +1,6 @@
+fetch('https://usuario.github.io/repositorio/data.json')
+
+
 class PokemonTCG {
   constructor() {
     this.pokemonData = []
