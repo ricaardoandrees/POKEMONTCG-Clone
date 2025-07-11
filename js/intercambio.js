@@ -66,10 +66,22 @@ function actualizarBotones() {
         
         if (oponenteConectado) {
             if (botonBuscar) botonBuscar.style.display = "none";
-            if (cartaSeleccionada && botonIntercambio) {
-                botonIntercambio.style.display = "inline-block";
-            } else if (botonIntercambio) {
-                botonIntercambio.style.display = "none";
+            
+            // ✅ PERMITIR INTERCAMBIO INCLUSO SIN CARTA SELECCIONADA (PARA REGALOS)
+            if (botonIntercambio) {
+                if (cartaSeleccionada) {
+                    // Intercambio normal o regalo
+                    botonIntercambio.style.display = "inline-block";
+                    botonIntercambio.textContent = "🔄 Enviar Oferta de Intercambio";
+                } else {
+                    // Solo ocultar si no hay cartas disponibles
+                    if (misCartas.length > 0) {
+                        botonIntercambio.style.display = "inline-block";
+                        botonIntercambio.textContent = "🎁 Regalar Carta (selecciona una)";
+                    } else {
+                        botonIntercambio.style.display = "none";
+                    }
+                }
             }
         } else {
             if (botonBuscar) botonBuscar.style.display = "inline-block";
@@ -150,6 +162,19 @@ function mostrarCartasOponente(cartasIds) {
 }
 
 function seleccionarCarta(pokemonId) {
+    // ✅ IMPLEMENTAR TOGGLE: si la carta ya está seleccionada, deseleccionarla
+    if (cartaSeleccionada === pokemonId) {
+        // Deseleccionar la carta actual
+        document.querySelectorAll('.carta').forEach(carta => carta.classList.remove('sombra'));
+        cartaSeleccionada = null;
+        actualizarCartaSeleccionada(null);
+        actualizarBotones();
+        mostrarExito(`Carta #${pokemonId} deseleccionada`);
+        console.log(`🔄 Carta #${pokemonId} deseleccionada`);
+        return;
+    }
+    
+    // Seleccionar nueva carta (comportamiento original)
     document.querySelectorAll('.carta').forEach(carta => carta.classList.remove('sombra'));
     
     cartaSeleccionada = pokemonId;
@@ -159,6 +184,7 @@ function seleccionarCarta(pokemonId) {
     actualizarCartaSeleccionada(pokemonId);
     actualizarBotones();
     mostrarExito(`Carta #${pokemonId} seleccionada`);
+    console.log(`✅ Carta #${pokemonId} seleccionada`);
 }
 
 // ========== FUNCIONES DE CONEXIÓN ==========
@@ -236,6 +262,46 @@ function actualizarMazos(cartaRecibida, cartaEntregada) {
     
     misCartas = misCartas.filter((id) => id !== cartaEntregada);
     misCartas.push(parseInt(cartaRecibida));
+
+    cargarPokemons();
+    cartaSeleccionada = null;
+    actualizarCartaSeleccionada(null);
+    actualizarBotones();
+
+    if (channel) {
+        setTimeout(() => {
+            channel.publish("actualizar_lista", {
+                jugadorId: ably.auth.clientId,
+                cartas: misCartas,
+            });
+        }, 500);
+    }
+}
+
+// ✅ NUEVA FUNCIÓN: Recibir regalo (solo recibo carta)
+function recibirRegalo(cartaRecibida) {
+    localStorage.setItem(cartaRecibida, "true");
+    misCartas.push(parseInt(cartaRecibida));
+
+    cargarPokemons();
+    actualizarBotones();
+
+    if (channel) {
+        setTimeout(() => {
+            channel.publish("actualizar_lista", {
+                jugadorId: ably.auth.clientId,
+                cartas: misCartas,
+            });
+        }, 500);
+    }
+    
+    mostrarExito(`🎁 ¡Regalo recibido! Obtuviste la carta #${cartaRecibida}`);
+}
+
+// ✅ NUEVA FUNCIÓN: Entregar regalo (solo entrego carta)
+function entregarRegalo(cartaEntregada) {
+    localStorage.setItem(cartaEntregada, "false");
+    misCartas = misCartas.filter((id) => id !== cartaEntregada);
 
     cargarPokemons();
     cartaSeleccionada = null;
@@ -334,17 +400,41 @@ function configurarEventosCanal() {
     channel.subscribe("oferta_carta", (mensaje) => {
         if (mensaje.data.jugadorId !== ably.auth.clientId) {
             const { cartaId } = mensaje.data;
-            const confirmacion = confirm(
-                `¿Aceptas intercambiar tu carta (#${cartaSeleccionada || 'ninguna'}) por la carta #${cartaId}?`
-            );
+            let mensajeConfirmacion;
+            
+            // ✅ DETERMINAR EL TIPO DE INTERCAMBIO
+            if (cartaSeleccionada) {
+                // Intercambio normal: carta por carta
+                mensajeConfirmacion = `¿Aceptas intercambiar tu carta #${cartaSeleccionada} por la carta #${cartaId}?`;
+            } else {
+                // Regalo: recibir carta sin dar nada a cambio
+                mensajeConfirmacion = `🎁 El oponente quiere regalarte la carta #${cartaId}. ¿Aceptas el regalo?`;
+            }
+            
+            const confirmacion = confirm(mensajeConfirmacion);
 
-            if (confirmacion && cartaSeleccionada) {
-                channel.publish("aceptar_intercambio", {
-                    jugadorId: ably.auth.clientId,
-                    miCarta: cartaSeleccionada,
-                    cartaOponente: cartaId
-                });
-                actualizarMazos(cartaId, cartaSeleccionada);
+            if (confirmacion) {
+                // ✅ MANEJAR AMBOS TIPOS DE INTERCAMBIO
+                if (cartaSeleccionada) {
+                    // Intercambio normal
+                    channel.publish("aceptar_intercambio", {
+                        jugadorId: ably.auth.clientId,
+                        miCarta: cartaSeleccionada,
+                        cartaOponente: cartaId,
+                        tipoIntercambio: "normal"
+                    });
+                    actualizarMazos(cartaId, cartaSeleccionada);
+                } else {
+                    // Regalo recibido
+                    channel.publish("aceptar_intercambio", {
+                        jugadorId: ably.auth.clientId,
+                        miCarta: null, // No doy nada a cambio
+                        cartaOponente: cartaId,
+                        tipoIntercambio: "regalo"
+                    });
+                    // Solo recibo la carta, no entrego nada
+                    recibirRegalo(cartaId);
+                }
             } else {
                 channel.publish("cancelar_intercambio", {
                     jugadorId: ably.auth.clientId,
@@ -356,19 +446,47 @@ function configurarEventosCanal() {
     // Intercambio aceptado
     channel.subscribe("aceptar_intercambio", (mensaje) => {
         if (mensaje.data.jugadorId !== ably.auth.clientId) {
-            const cartaRecibida = mensaje.data.miCarta;
-            const cartaEntregada = mensaje.data.cartaOponente;
-            mostrarExito(`¡Intercambio exitoso! Recibiste carta #${cartaRecibida}`);
-            if (localStorage.getItem(cartaEntregada) === "true") {
-                actualizarMazos(cartaRecibida, cartaEntregada);
+            const { miCarta, cartaOponente, tipoIntercambio } = mensaje.data;
+            
+            if (tipoIntercambio === "regalo") {
+                // ✅ REGALO COMPLETADO
+                mostrarExito(`🎁 ¡Regalo enviado! Le diste la carta #${cartaOponente} al oponente`);
+                // Solo entrego mi carta, no recibo nada
+                entregarRegalo(cartaOponente);
+            } else {
+                // ✅ INTERCAMBIO NORMAL
+                mostrarExito(`🔄 ¡Intercambio exitoso! Recibiste carta #${miCarta}`);
+                if (localStorage.getItem(cartaOponente) === "true") {
+                    actualizarMazos(miCarta, cartaOponente);
+                }
             }
         }
     });
 
-    // Intercambio cancelado
+    // ⚠️ CAMBIO PRINCIPAL: Intercambio cancelado
     channel.subscribe("cancelar_intercambio", (mensaje) => {
         if (mensaje.data.jugadorId !== ably.auth.clientId) {
             mostrarError("El oponente rechazó el intercambio");
+            
+            // ✅ VOLVER A MOSTRAR EL BOTÓN DE INTERCAMBIO
+            // Si tenemos una carta seleccionada y hay oponente conectado,
+            // volvemos a mostrar el botón para permitir otro intento
+            if (oponenteConectado) {
+                const botonIntercambio = document.getElementById("intercambio");
+                if (botonIntercambio) {
+                    botonIntercambio.style.display = "inline-block";
+                    // Restaurar texto del botón según el estado
+                    if (cartaSeleccionada) {
+                        botonIntercambio.textContent = "🔄 Enviar Oferta de Intercambio";
+                    } else {
+                        botonIntercambio.textContent = "🎁 Regalar Carta (selecciona una)";
+                    }
+                    console.log("✅ Botón de intercambio restaurado después del rechazo");
+                }
+            }
+            
+            // También podemos actualizar todos los botones para asegurarnos
+            actualizarBotones();
         }
     });
 }
@@ -436,20 +554,38 @@ document.addEventListener("DOMContentLoaded", () => {
         botonDesconectar.onclick = desconectar;
     }
 
-    // Botón intercambio
+    // ⚠️ CAMBIO PRINCIPAL: Botón intercambio mejorado para regalos
     document.getElementById("intercambio").addEventListener("click", function () {
-        if (!conectado || !cartaSeleccionada || !oponenteConectado) {
-            mostrarError("Verifica: conexión, carta seleccionada y oponente");
+        if (!conectado || !oponenteConectado) {
+            mostrarError("Verifica: conexión y oponente conectado");
             return;
         }
 
+        // ✅ PERMITIR ENVÍO SIN CARTA SELECCIONADA PARA REGALOS
+        if (!cartaSeleccionada) {
+            mostrarError("Selecciona una carta para regalar");
+            return;
+        }
+
+        // ✅ OCULTAR EL BOTÓN INMEDIATAMENTE AL ENVIARLO
+        this.style.display = "none";
+        
+        // ✅ DETERMINAR TIPO DE INTERCAMBIO POR EL TEXTO DEL BOTÓN
+        const esRegalo = this.textContent.includes("Regalar");
+        
         channel.publish("oferta_carta", {
             jugadorId: ably.auth.clientId,
-            cartaId: cartaSeleccionada
+            cartaId: cartaSeleccionada,
+            tipoOferta: esRegalo ? "regalo" : "intercambio"
         });
         
-        mostrarExito(`Oferta enviada: Carta #${cartaSeleccionada}`);
-        this.style.display = "none";
+        if (esRegalo) {
+            mostrarExito(`🎁 Oferta de regalo enviada: Carta #${cartaSeleccionada}`);
+        } else {
+            mostrarExito(`🔄 Oferta de intercambio enviada: Carta #${cartaSeleccionada}`);
+        }
+        
+        console.log("📤 Oferta enviada, botón ocultado");
     });
     
     console.log("Sistema de intercambio cargado");
