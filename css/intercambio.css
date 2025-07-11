@@ -1,0 +1,401 @@
+:root {
+    --bg-main: hsla(65, 60%, 97%, 1);
+    --bg-gradient1: hsla(190, 56%, 91%, 0.53);
+    --bg-gradient2: hsla(29.12, 100%, 90%, 1);
+    --bg-gradient3: hsla(43, 91%, 94%, 1);
+    --bg-gradient4: hsla(81, 82%, 98%, 1);
+    --bg-gradient5: hsla(252.79, 81%, 51%, 0.48);
+    --glass: rgba(0, 0, 0, 0.09);
+    --text-main: #222;
+    --card-shadow: 0px 5px 10px 1px #d3d3d3;
+    --card-shadow-selected: 0px 8px 25px 3px #4a90e2;
+    --radius: 10px;
+    --gap-main: 1em;
+    --footer-bg: var(--glass);
+    --success-color: #28a745;
+    --error-color: #dc3545;
+    --warning-color: #ffc107;
+}
+
+* {
+    margin: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+.body-intercambio {
+    background-color: var(--bg-main);
+    background-image: radial-gradient(
+            circle at 50% 50%,
+            var(--bg-gradient1) 40%,
+            transparent 100%
+        ),
+        radial-gradient(circle at 92% 93%, var(--bg-gradient2) 20%, transparent 70%),
+        radial-gradient(circle at 8% 11%, var(--bg-gradient3) 20%, transparent 70%),
+        radial-gradient(circle at 16% 43%, var(--bg-gradient4) 20%, transparent 70%),
+        radial-gradient(circle at 48% 8%, var(--bg-gradient5) 20%, transparent 70%);
+    background-blend-mode: normal, normal, normal, normal, normal;
+    min-height: 100vh;
+}
+
+.main-intercambio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    padding: var(--gap-main);
+    padding-bottom: 100px; /* Espacio para el footer */
+}
+
+.contenedor-personal,
+.contenedor-rival {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: var(--gap-main);
+    padding: var(--gap-main);
+    background-color: var(--glass);
+    border-radius: var(--radius);
+    box-shadow: var(--card-shadow);
+    width: 90vw;
+    max-width: 1200px;
+    min-height: 200px;
+    max-height: 300px;
+    overflow-y: auto;
+    margin: 10px 0;
+}
+
+.contenedor-personal h2,
+.contenedor-rival h2 {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--text-main);
+    margin: 0;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: var(--radius);
+}
+
+.carta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--glass);
+    border-radius: var(--radius);
+    box-shadow: var(--card-shadow);
+    padding: 10px;
+    min-height: 150px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.carta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0px 8px 15px 2px rgba(0, 0, 0, 0.2);
+}
+
+.carta.sombra {
+    border-color: #4a90e2;
+    box-shadow: var(--card-shadow-selected);
+    transform: scale(1.05);
+}
+
+.carta img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+
+.carta p {
+    margin: 2px 0;
+    font-size: 12px;
+    text-align: center;
+    color: var(--text-main);
+}
+
+.contenedor-imagen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+    padding: 20px;
+}
+
+.imagen-de-intercambio {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+.boton {
+    background: linear-gradient(45deg, #4a90e2, #357abd);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: var(--card-shadow);
+    margin: 10px;
+}
+
+.boton:hover {
+    background: linear-gradient(45deg, #357abd, #2c5aa0);
+    transform: translateY(-1px);
+    box-shadow: 0px 6px 12px 2px rgba(0, 0, 0, 0.2);
+}
+
+.boton:active {
+    transform: translateY(0);
+}
+
+.boton:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.boton-secundario {
+    background: linear-gradient(45deg, #ffc107, #e0a800);
+    color: #333;
+}
+
+.boton-secundario:hover {
+    background: linear-gradient(45deg, #e0a800, #d39e00);
+}
+
+.boton-desconectar {
+    background: linear-gradient(45deg, #dc3545, #c82333);
+}
+
+.boton-desconectar:hover {
+    background: linear-gradient(45deg, #c82333, #bd2130);
+}
+
+#intercambio {
+    background: linear-gradient(45deg, var(--success-color), #218838);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.footer-intercambio {
+    z-index: 2;
+    left: 0;
+    bottom: 0;
+    position: fixed;
+    background-color: var(--footer-bg);
+    backdrop-filter: blur(10px);
+    width: 100vw;
+    padding: var(--gap-main);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-main);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.footer-nav,
+.footer-links {
+    list-style: none;
+    display: flex;
+    gap: var(--gap-main);
+    padding: 0;
+}
+
+.elemento {
+    background-color: var(--glass);
+    color: var(--text-main);
+    border-radius: 5px;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.elemento:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+/* Estilos para notificaciones */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: var(--radius);
+    color: white;
+    font-weight: bold;
+    z-index: 1000;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.notification.success {
+    background-color: var(--success-color);
+}
+
+.notification.error {
+    background-color: var(--error-color);
+}
+
+/* Estados de carga */
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .contenedor-personal,
+    .contenedor-rival {
+        width: 95vw;
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        max-height: 250px;
+    }
+    
+    .carta {
+        min-height: 120px;
+        padding: 8px;
+    }
+    
+    .carta img {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .imagen-de-intercambio {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .boton {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+    
+    .footer-links {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .elemento {
+        text-align: center;
+        padding: 6px 12px;
+    }
+}
+
+/* Estilos para controles */
+.controles {
+    display: flex;
+    gap: var(--gap-main);
+    margin: 20px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.estado-info {
+    text-align: center;
+    margin: 10px 0;
+    padding: 10px;
+    background-color: var(--glass);
+    border-radius: var(--radius);
+    max-width: 400px;
+}
+
+.estado-info p {
+    margin: 5px 0;
+    color: var(--text-main);
+    font-weight: bold;
+}
+
+#estado-conexion {
+    padding: 5px 10px;
+    border-radius: 15px;
+    display: inline-block;
+}
+
+#estado-conexion.conectado {
+    background-color: var(--success-color);
+    color: white;
+}
+
+#estado-conexion.desconectado {
+    background-color: var(--error-color);
+    color: white;
+}
+
+#estado-conexion.conectando {
+    background-color: var(--warning-color);
+    color: black;
+}
+
+.titulo {
+    text-align: center;
+    color: var(--text-main);
+    font-size: 2em;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Enlaces del footer */
+.footer-links a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.footer-links a:hover {
+    color: #4a90e2;
+}
+
+/* Scrollbar personalizada */
+.contenedor-personal::-webkit-scrollbar,
+.contenedor-rival::-webkit-scrollbar {
+    width: 8px;
+}
+
+.contenedor-personal::-webkit-scrollbar-track,
+.contenedor-rival::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+.contenedor-personal::-webkit-scrollbar-thumb,
+.contenedor-rival::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+}
+
+.contenedor-personal::-webkit-scrollbar-thumb:hover,
+.contenedor-rival::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.5);
+}
