@@ -1,0 +1,82 @@
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Colección</title>
+		<link rel="stylesheet" href="css/styleindex.css" />
+	</head>
+	<body class="body-index">
+		<header class="index-header">
+			<h1 class="titulo">Mis cartas</h1>
+			<form class="contenedor-input" action="/search">
+				<input
+					class="buscador"
+					type="text"
+					name="query"
+					placeholder="Buscar..."
+				/>
+			</form>
+			<nav class="navegador">
+				<ul class="pokemon-types-list">
+					<li class="pokemon-type">Normal</li>
+					<li class="pokemon-type">Fire</li>
+					<li class="pokemon-type">Water</li>
+					<li class="pokemon-type">Flying</li>
+					<li class="pokemon-type">Grass</li>
+					<li class="pokemon-type">Poison</li>
+					<li class="pokemon-type">Electric</li>
+					<li class="pokemon-type">Ground</li>
+					<li class="pokemon-type">Psychic</li>
+					<li class="pokemon-type">Rock</li>
+					<li class="pokemon-type">Ice</li>
+					<li class="pokemon-type">Bug</li>
+					<li class="pokemon-type">Dragon</li>
+					<li class="pokemon-type">Ghost</li>
+					<li class="pokemon-type">Dark</li>
+					<li class="pokemon-type">Steel</li>
+					<li class="pokemon-type">Fairy</li>
+					<li class="pokemon-type">Fighting</li>
+					<li class="pokemon-type">All</li>
+				</ul>
+			</nav>
+		</header>
+
+		<main>
+			<section id="pokemons" class="cards">
+				<dialog id="card-dialog" class="dialogCard">
+					<div class="dialog-content">
+						<button class="close-button">X</button>
+						<img id="dialog-image" src="" alt="Pokemon Image" class="dialog-image">
+						<div class="dialog-info">
+							<h2 id="dialog-name"></h2>
+							<p id="dialog-id"></p>
+							<div class="dialog-types" id="dialog-types"></div>
+							<div class="dialog-stats">
+								<h3>Stats</h3>
+								<div id="dialog-stats"></div>
+							</div>
+							<div class="dialog-abilities">
+								<h3>Abilities</h3>
+								<div id="dialog-abilities"></div>
+							</div>
+						</div>
+					</div>
+				</dialog>
+			</section>
+		</main>
+
+		<footer class="footer-index">
+			<nav class="footer-nav">
+				<ul class="footer-links">
+					<li class="elemento"><a href="index.html"></a>Colección</li>
+					<li class="elemento"><a href="sobres.html"></a>Sobres</li>
+					<li class="elemento"><a href="intercambio.html"></a>Intercambio</li>
+				</ul>
+			</nav>
+		</footer>
+		<script src="js/scriptindex.js"></script>
+	</body>
+</html>
+
