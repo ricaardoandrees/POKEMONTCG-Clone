@@ -1,0 +1,288 @@
+:root {
+	--bg-main: hsla(65, 60%, 97%, 1);
+	--bg-gradient1: hsla(190, 56%, 91%, 0.53);
+	--bg-gradient2: hsla(29.12, 100%, 90%, 1);
+	--bg-gradient3: hsla(43, 91%, 94%, 1);
+	--bg-gradient4: hsla(81, 82%, 98%, 1);
+	--bg-gradient5: hsla(252.79, 81%, 51%, 0.48);
+	--glass: rgba(
+		0,
+		0,
+		0,
+		0.09
+	); /* Sutil transparencia negra para contraste en fondo claro */
+	--text-main: #222; /* Texto principal oscuro para mejor contraste */
+	--card-shadow: 0px 5px 10px 1px #d3d3d3;
+	--radius: 10px;
+	--gap-main: 1em;
+	--footer-bg: var(--glass);
+}
+
+* {
+	margin: 0;
+	box-sizing: border-box;
+	font-family: Arial, sans-serif;
+}
+
+.body-index {
+	background-color: var(--bg-main);
+	background-image: radial-gradient(
+			circle at 50% 50%,
+			var(--bg-gradient1) 40%,
+			transparent 100%
+		),
+		radial-gradient(circle at 92% 93%, var(--bg-gradient2) 20%, transparent 70%),
+		radial-gradient(circle at 8% 11%, var(--bg-gradient3) 20%, transparent 70%),
+		radial-gradient(circle at 16% 43%, var(--bg-gradient4) 20%, transparent 70%),
+		radial-gradient(circle at 48% 8%, var(--bg-gradient5) 20%, transparent 70%);
+	background-blend-mode: normal, normal, normal, normal, normal;
+}
+
+.index-header {
+	background-color: var(--glass);
+	backdrop-filter: blur(12px);
+	padding: 1.2em 2em;
+	border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+	top: 0;
+	z-index: 10;
+	transition: all 0.3s ease;
+	animation: fadeInHeader 0.6s ease-out;
+}
+
+.titulo {
+	text-align: center;
+	color: var(--text-main);
+	font-size: 1.5em;
+}
+
+.contenedor-input {
+	display: flex;
+	justify-content: center;
+	margin: var(--gap-main);
+}
+
+.navegador {
+	overflow-x: auto;
+	overflow-y: hidden;
+}
+
+.pokemon-types-list {
+	list-style: none;
+	width: 100%;
+	display: flex;
+	gap: 0.5em;
+	padding: 0;
+}
+
+.pokemon-type,
+.elemento {
+	background-color: var(--glass);
+	border-radius: 5px;
+	padding: 0.1em 0.5em;
+	text-align: center;
+}
+
+.pokemon-type {
+	color: var(--text-main);
+}
+
+.elemento {
+	color: #111;
+}
+
+.cards {
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	gap: var(--gap-main);
+	padding: 1em;
+}
+
+.cardNoFound {
+	background-color: var(--glass);
+	box-shadow: var(--card-shadow);
+	border-radius: var(--radius);
+	padding: var(--gap-main);
+	height: 40vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	color: var(--text-main);
+}
+
+.cardFound {
+	background-color: var(--glass);
+	box-shadow: var(--card-shadow);
+	border-radius: var(--radius);
+	padding: var(--gap-main);
+	height: 40vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	color: var(--text-main);
+}
+
+.card-types {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+}
+
+.imagen-card {
+	width: 100%;
+	max-width: 6em;
+}
+
+.dialogCard {
+	background-color: var(--glass);
+	backdrop-filter: blur(10px);
+	border-radius: var(--radius);
+	box-shadow: var(--card-shadow);
+	padding: var(--gap-main);
+	color: var(--text-main);
+	height: 45vh;
+	position: absolute;
+	transform: translate3d(-50%, -50%, 0);
+	top: 50%;
+	left: 50%;
+}
+
+@media (max-width: 767px) {
+	.cards {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: var(--gap-main);
+		padding: 1em;
+	}
+
+	.cardNoFound {
+		background-color: var(--glass);
+		box-shadow: var(--card-shadow);
+		border-radius: var(--radius);
+		padding: var(--gap-main);
+		color: var(--text-main);
+		width: 100%;
+		min-width: 0;
+		box-sizing: border-box;
+		height: 40vh;
+		margin: 0;
+	}
+
+	.footer-links {
+		flex-direction: column;
+		gap: 5px;
+	}
+
+	.navegador::-webkit-scrollbar {
+		display: none;
+	}
+}
+/*efecto para al pasar el mouse cambie de color*/
+@keyframes tipoHoverEffect {
+	0% {
+		transform: scale(1);
+		background-color: #ada88e;
+		box-shadow: none;
+	}
+	100% {
+		transform: scale(1.1);
+		background-color: #b8ceac;
+		box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+	}
+}
+
+.pokemon-type {
+	display: inline-block;
+	padding: 0.5rem 1rem;
+	transition: transform 0.3s ease, background-color 0.3s ease;
+	cursor: pointer;
+	border-radius: 6px;
+	background-color: #f2f2f2;
+}
+
+.pokemon-type:hover {
+	animation: tipoHoverEffect 0.3s forwards;
+}
+
+/* efecto activo (después de hacer clic) */
+.pokemon-type.activo {
+	background-color: #b887b1;
+	color: white;
+	transform: scale(1.1);
+	box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+}
+/*CSS NUEVO*/
+.dialogCard {
+	border: none;
+	border-radius: 10px;
+	padding: 0;
+	max-width: 90%;
+	width: 500px;
+	background-color: white;
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.dialogCard::backdrop {
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.dialog-content {
+	display: flex;
+	flex-direction: column;
+	padding: 20px;
+	position: relative;
+}
+
+.close-button {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	background: none;
+	border: none;
+	font-size: 1.2rem;
+	cursor: pointer;
+}
+
+.dialog-image {
+	width: 200px;
+	height: 200px;
+	margin: 0 auto;
+}
+
+.dialog-info {
+	margin-top: 20px;
+}
+
+.dialog-types {
+	display: flex;
+	gap: 10px;
+	margin: 10px 0;
+}
+
+.dialog-types p {
+	padding: 5px 10px;
+	border-radius: 20px;
+	color: white;
+	text-transform: capitalize;
+}
+
+.dialog-stats,
+.dialog-abilities {
+	margin-top: 15px;
+}
+
+.dialog-stats div,
+.dialog-abilities div {
+	margin-top: 5px;
+}
+
+.modal-type {
+	background-color: #b887b1;
+	color: white;
+	border-radius: 6px;
+	padding: 2px 6px;
+	margin-right: 4px;
+	font-weight: bold;
+	display: inline-block;
+}

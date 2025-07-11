@@ -1,2 +1,7 @@
 node_modules/
 .vscode/
+# Ignorar la carpeta node_modules
+node_modules/
+
+# Ignorar todos los archivos .json
+*.json

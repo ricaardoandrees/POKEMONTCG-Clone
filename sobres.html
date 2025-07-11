@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokémon TCG - Sobres de Cartas</title>
+    <link rel="stylesheet" href="css/sobres.css" />
+    <link rel="stylesheet" href="css/footer.css" />
+    
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎴 Pokémon TCG</h1>
+            <div class="stats">
+                <span>Cartas coleccionadas: <span id="card-count">0</span></span>
+            </div>
+        </header>
+
+        <div id="packs-section" class="tab-content active">
+            <div class="packs-container">
+                <h2>Sobres Disponibles</h2>
+                <div class="packs-grid" id="packs-grid">
+                   
+                </div>
+                <button id="generate-packs" class="btn-primary">Generar Nuevos Sobres</button>
+            </div>
+
+           
+            <div id="pack-modal" class="modal">
+                <div class="modal-content">
+                    <div class="pack-opening">
+                        <div class="pack-animation" id="pack-animation">
+                            <div class="pack-image">📦</div>
+                            <div class="opening-text">Abriendo sobre...</div>
+                        </div>
+                        <div class="cards-reveal" id="cards-reveal">
+                     
+                        </div>
+                    </div>
+                    <button id="close-modal" class="btn-secondary">Cerrar</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="collection-section" class="tab-content">
+            <h2>Mi Colección</h2>
+            <div class="collection-stats">
+                <div class="stat-card">
+                    <h3>Total de Cartas</h3>
+                    <span id="total-cards">0</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Pokémon Únicos</h3>
+                    <span id="unique-pokemon">0</span>
+                </div>
+            </div>
+            <div class="collection-grid" id="collection-grid">
+                <!-- La colección se mostrará aquí -->
+            </div>
+            <button id="clear-collection" class="btn-danger">Limpiar Colección</button>
+        </div>
+    </div>
+
+    <footer class="footer-main">
+        <nav class="footer-nav">
+            <ul class="footer-links">
+                <li><a href="index.html" class="elemento">📚 Colección</a></li>
+                <li><a href="sobres.html" class="elemento">📦 Sobres</a></li>
+                <li><a href="intercambio.html" class="elemento">🔄 Intercambio</a></li>
+            </ul>
+        </nav>
+    </footer>
+
+    <script src="/js/sobres.js"></script>
+</body>
+</html>
+

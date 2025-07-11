@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Intercambio de Cartas Pokémon</title>
+    <link rel="stylesheet" href="css/intercambio.css" />
+    <link rel="stylesheet" href="css/footer.css" />
+    
+</head>
+<body class="body-intercambio">
+    <main class="main-intercambio">
+        <!-- Título principal -->
+        <h1 class="titulo">Intercambio de Cartas</h1>
+        
+        <!-- Contenedor de mis cartas -->
+        <section class="contenedor-personal" id="pokemons">
+            <h2>Mis Cartas Disponibles</h2>
+            <!-- Las cartas se cargarán aquí dinámicamente -->
+        </section>
+        
+        <!-- Imagen de intercambio -->
+        <section class="contenedor-imagen">
+            <img
+                src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png"
+                alt="Imagen de intercambio"
+                class="imagen-de-intercambio"
+            />
+        </section>
+        
+        <!-- Contenedor de cartas del rival -->
+        <section class="contenedor-rival" id="pokemons-rival">
+            <h2>Esperando conexión...</h2>
+            <!-- Las cartas del rival se cargarán aquí -->
+        </section>
+        
+        <!-- Botones de control -->
+        <div class="controles">
+            <button class="boton" id="conector">
+                🔗 Conectar al Servidor
+            </button>
+            
+            <button class="boton boton-secundario" id="buscar-oponente" style="display: none;">
+                🔍 Buscar Oponente
+            </button>
+            
+            <button class="boton boton-desconectar" id="desconectar" style="display: none;">
+                🚪 Desconectar
+            </button>
+            
+            <button class="boton" id="intercambio" style="display: none;">
+                🔄 Enviar Oferta de Intercambio
+            </button>
+        </div>
+        
+        <!-- Información de estado -->
+        <div class="estado-info">
+            <p id="estado-conexion">Desconectado</p>
+            <p id="carta-seleccionada" style="display: none;"></p>
+        </div>
+    </main>
+    
+    <!-- Footer de navegación -->
+    <footer class="footer-main">
+        <nav class="footer-nav">
+            <ul class="footer-links">
+                <li><a href="index.html" class="elemento">📚 Colección</a></li>
+                <li><a href="sobres.html" class="elemento">📦 Sobres</a></li>
+                <li><a href="intercambio.html" class="elemento">🔄 Intercambio</a></li>
+            </ul>
+        </nav>
+    </footer>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.ably.com/lib/ably.min-1.js"></script>
+    <script src="js/intercambio.js"></script>
+</body>
+</html>
