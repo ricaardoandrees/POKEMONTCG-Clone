@@ -115,8 +115,13 @@ class PokemonTCG {
 
 
   renderPacks() {
+    console.log("PokemonTCG: Rendering packs. Available packs:", this.availablePacks)
     const packsGrid = document.getElementById("packs-grid")
     packsGrid.innerHTML = ""
+
+    if (this.availablePacks.length === 0) {
+      console.log("PokemonTCG: No packs to render.")
+    }
 
     this.availablePacks.forEach((pack) => {
       if (!pack.opened) {
@@ -202,7 +207,7 @@ class PokemonTCG {
       const typesHTML = card.types.map((type) => `<span class="pokemon-type type-${type}">${type}</span>`).join("")
 
       cardElement.innerHTML = `
-                <img src="${card.image}" alt="${card.name}" onerror="this.src='/placeholder.svg?height=120&width=120'">
+                <img src="${card.image}" alt="${card.name}" onerror="this.src='../placeholder.svg?height=120&width=120'">
                 <h4>${card.name}</h4>
                 <div>${typesHTML}</div>
                 <div style="font-size: 0.8em; color: #666; margin-top: 5px;">
