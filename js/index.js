@@ -178,24 +178,3 @@ tipoItems.forEach((item) => {
 	});
 });
 
-
-/*<article id="pokemon" class="card">
-		<h2 id="id">#001</h2>
-		<p id="???">???</p>
-	</article> 
-*/
-
-/*<article class="cardFound">
-	<h2>bulbasaur</h2>
-	<img
-	src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png"
-	alt="Card 1"
-	class="imagen-card"
-	/>
-	<p>1</p>
-	<div class="card-types">
-		<p>tipo</p>
-		<p>tipo</p>
-	</div>
-	<p>ataque.</p>
-</article>*/
