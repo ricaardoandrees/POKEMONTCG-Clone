@@ -1,566 +1,577 @@
 :root {
-  --bg-main: hsla(65, 60%, 97%, 1);
-  --bg-gradient1: hsla(190, 56%, 91%, 0.53);
-  --bg-gradient2: hsla(29.12, 100%, 90%, 1);
-  --bg-gradient3: hsla(43, 91%, 94%, 1);
-  --bg-gradient4: hsla(81, 82%, 98%, 1);
-  --bg-gradient5: hsla(252.79, 81%, 51%, 0.48);
-  --glass: rgba(0, 0, 0, 0.09);
-  --text-main: #222;
-  --card-shadow: 0px 5px 10px 1px #d3d3d3;
-  --radius: 10px;
-  --gap-main: 1em;
-  --footer-bg: var(--glass);
+	--bg-main: hsla(65, 60%, 97%, 1);
+	--bg-gradient1: hsla(190, 56%, 91%, 0.53);
+	--bg-gradient2: hsla(29.12, 100%, 90%, 1);
+	--bg-gradient3: hsla(43, 91%, 94%, 1);
+	--bg-gradient4: hsla(81, 82%, 98%, 1);
+	--bg-gradient5: hsla(252.79, 81%, 51%, 0.48);
+	--glass: rgba(0, 0, 0, 0.09);
+	--text-main: #222;
+	--card-shadow: 0px 5px 10px 1px #d3d3d3;
+	--radius: 10px;
+	--gap-main: 1em;
+	--footer-bg: var(--glass);
 }
 
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: Arial, sans-serif;
 }
 
 body {
-  background-color: var(--bg-main);
-  background-image: radial-gradient(circle at 50% 50%, var(--bg-gradient1) 40%, transparent 100%),
-    radial-gradient(circle at 92% 93%, var(--bg-gradient2) 20%, transparent 70%),
-    radial-gradient(circle at 8% 11%, var(--bg-gradient3) 20%, transparent 70%),
-    radial-gradient(circle at 16% 43%, var(--bg-gradient4) 20%, transparent 70%),
-    radial-gradient(circle at 48% 8%, var(--bg-gradient5) 20%, transparent 70%);
-  background-blend-mode: normal, normal, normal, normal, normal;
-  min-height: 100vh;
-  color: var(--text-main);
+	background-color: var(--bg-main);
+	background-image: radial-gradient(
+			circle at 50% 50%,
+			var(--bg-gradient1) 40%,
+			transparent 100%
+		),
+		radial-gradient(circle at 92% 93%, var(--bg-gradient2) 20%, transparent 70%),
+		radial-gradient(circle at 8% 11%, var(--bg-gradient3) 20%, transparent 70%),
+		radial-gradient(circle at 16% 43%, var(--bg-gradient4) 20%, transparent 70%),
+		radial-gradient(circle at 48% 8%, var(--bg-gradient5) 20%, transparent 70%);
+	background-blend-mode: normal, normal, normal, normal, normal;
+	min-height: 100vh;
+	color: var(--text-main);
 }
 
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 20px;
 }
 
 /* Ajustar el padding del contenido principal */
 .container > *:not(header) {
-  padding: 0;
+	padding: 0;
 }
 
 /* Header */
 header {
-  background-color: var(--glass);
-  padding: 1em 2em;
-  text-align: center;
-  margin-bottom: var(--gap-main);
-  width: 100%;
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
-  width: 100vw;
+	background-color: var(--glass);
+	padding: 1em 2em;
+	text-align: center;
+	margin-bottom: var(--gap-main);
+	width: 100%;
+	position: relative;
+	left: 50%;
+	right: 50%;
+	margin-left: -50vw;
+	margin-right: -50vw;
+	width: 100vw;
 }
 
 header h1 {
-  color: var(--text-main);
-  font-size: 1.8em;
-  margin-bottom: 0.5em;
+	color: var(--text-main);
+	font-size: 1.8em;
+	margin-bottom: 0.5em;
 }
 
 .stats {
-  font-size: 1em;
-  color: var(--text-main);
+	font-size: 1em;
+	color: var(--text-main);
 }
 
 /* Tabs */
 .tabs {
-  display: flex;
-  justify-content: center;
-  margin-bottom: var(--gap-main);
-  gap: 0.5em;
+	display: flex;
+	justify-content: center;
+	margin-bottom: var(--gap-main);
+	gap: 0.5em;
 }
 
 .tab-btn {
-  background-color: var(--glass);
-  border: none;
-  border-radius: var(--radius);
-  padding: 0.8em 1.5em;
-  cursor: pointer;
-  font-size: 1em;
-  color: var(--text-main);
-  transition: all 0.3s ease;
-  box-shadow: var(--card-shadow);
+	background-color: var(--glass);
+	border: none;
+	border-radius: var(--radius);
+	padding: 0.8em 1.5em;
+	cursor: pointer;
+	font-size: 1em;
+	color: var(--text-main);
+	transition: all 0.3s ease;
+	box-shadow: var(--card-shadow);
 }
 
 .tab-btn:hover {
-  transform: scale(1.05);
-  background-color: rgba(0, 0, 0, 0.15);
+	transform: scale(1.05);
+	background-color: rgba(0, 0, 0, 0.15);
 }
 
 .tab-btn.active {
-  background-color: #b887b1;
-  color: white;
-  transform: scale(1.1);
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+	background-color: #b887b1;
+	color: white;
+	transform: scale(1.1);
+	box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
 }
 
 .tab-content {
-  display: none;
+	display: none;
 }
 
 .tab-content.active {
-  display: block;
+	display: block;
 }
 
 /* Sobres Section */
 .packs-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 3.2em;
-  box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 3.2em;
+	box-sizing: border-box;
 }
 
 .packs-container h2 {
-  text-align: center;
-  color: var(--text-main);
-  font-size: 2em;
-  margin-bottom: var(--gap-main);
+	text-align: center;
+	color: var(--text-main);
+	font-size: 2em;
+	margin-bottom: var(--gap-main);
 }
 
 .packs-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--gap-main);
-  width: 100%;
-  max-width: 900px;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: var(--gap-main);
+	width: 100%;
+	max-width: 900px;
 }
 
 .pack-card {
-  background-color: var(--glass);
-  backdrop-filter: blur(10px);
-  box-shadow: var(--card-shadow);
-  border-radius: var(--radius);
-  padding: var(--gap-main);
-  height: 40vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: var(--text-main);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
+	background-color: var(--glass);
+	backdrop-filter: blur(10px);
+	box-shadow: var(--card-shadow);
+	border-radius: var(--radius);
+	padding: var(--gap-main);
+	height: 40vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	color: var(--text-main);
+	cursor: pointer;
+	transition: all 0.3s ease;
+	position: relative;
+	overflow: hidden;
 }
 
 .pack-card::before {
-  content: "";
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transform: rotate(45deg);
-  transition: all 0.6s ease;
-  opacity: 0;
+	content: "";
+	position: absolute;
+	top: -50%;
+	left: -50%;
+	width: 200%;
+	height: 200%;
+	background: linear-gradient(
+		45deg,
+		transparent,
+		rgba(255, 255, 255, 0.3),
+		transparent
+	);
+	transform: rotate(45deg);
+	transition: all 0.6s ease;
+	opacity: 0;
 }
 
 .pack-card:hover::before {
-  opacity: 1;
-  animation: shine 0.6s ease-in-out;
+	opacity: 1;
+	animation: shine 0.6s ease-in-out;
 }
 
 .pack-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+	transform: translateY(-5px);
+	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 }
 
 @keyframes shine {
-  0% {
-    transform: translateX(-100%) translateY(-100%) rotate(45deg);
-  }
-  100% {
-    transform: translateX(100%) translateY(100%) rotate(45deg);
-  }
+	0% {
+		transform: translateX(-100%) translateY(-100%) rotate(45deg);
+	}
+	100% {
+		transform: translateX(100%) translateY(100%) rotate(45deg);
+	}
 }
 
 .pack-icon {
-  font-size: 4em;
-  margin-bottom: 10px;
+	font-size: 4em;
+	margin-bottom: 10px;
 }
 
 .pack-card h3 {
-  color: var(--text-main);
-  margin-bottom: 10px;
-  font-size: 1.2em;
+	color: var(--text-main);
+	margin-bottom: 10px;
+	font-size: 1.2em;
 }
 
 .pack-card p {
-  color: var(--text-main);
-  font-size: 0.9em;
-  text-align: center;
+	color: var(--text-main);
+	font-size: 0.9em;
+	text-align: center;
 }
 
 /* Botones */
 .btn-primary,
 .btn-secondary,
 .btn-danger {
-  background-color: var(--glass);
-  border: none;
-  border-radius: var(--radius);
-  padding: 0.8em 1.5em;
-  cursor: pointer;
-  font-size: 1em;
-  color: var(--text-main);
-  transition: all 0.3s ease;
-  box-shadow: var(--card-shadow);
-  margin: var(--gap-main);
+	background-color: var(--glass);
+	border: none;
+	border-radius: var(--radius);
+	padding: 0.8em 1.5em;
+	cursor: pointer;
+	font-size: 1em;
+	color: var(--text-main);
+	transition: all 0.3s ease;
+	box-shadow: var(--card-shadow);
+	margin: var(--gap-main);
 }
 
 .btn-primary {
-  background-color: #b8ceac;
+	background-color: #b8ceac;
 }
 
 .btn-primary:hover {
-  background-color: #a5c299;
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+	background-color: #a5c299;
+	transform: translateY(-2px);
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .btn-secondary {
-  background-color: #ada88e;
+	background-color: #ada88e;
 }
 
 .btn-secondary:hover {
-  background-color: #9a9580;
-  transform: translateY(-2px);
+	background-color: #9a9580;
+	transform: translateY(-2px);
 }
 
 .btn-danger {
-  background-color: #e74c3c;
-  color: white;
+	background-color: #e74c3c;
+	color: white;
 }
 
 .btn-danger:hover {
-  background-color: #c0392b;
-  transform: translateY(-2px);
+	background-color: #c0392b;
+	transform: translateY(-2px);
 }
 
 /* Modal */
 .modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-  justify-content: center;
-  align-items: center;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 1000;
+	justify-content: center;
+	align-items: center;
+	opacity: 0;
+	transition: opacity 0.3s ease;
 }
 
 .modal.active {
-  display: flex;
-  opacity: 1;
+	display: flex;
+	opacity: 1;
 }
 
 .modal-content {
-  background-color: white;
-  border-radius: var(--radius);
-  box-shadow: var(--card-shadow);
-  padding: var(--gap-main);
-  max-width: 90%;
-  max-height: 90%;
-  overflow-y: auto;
-  text-align: center;
-  color: var(--text-main);
+	background-color: white;
+	border-radius: var(--radius);
+	box-shadow: var(--card-shadow);
+	padding: var(--gap-main);
+	max-width: 90%;
+	max-height: 90%;
+	overflow-y: auto;
+	text-align: center;
+	color: var(--text-main);
 }
 
 .pack-opening {
-  min-height: 400px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+	min-height: 400px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
 .pack-animation {
-  margin-bottom: 30px;
+	margin-bottom: 30px;
 }
 
 .pack-image {
-  font-size: 8em;
-  animation: simpleFloat 2s ease-in-out infinite;
+	font-size: 8em;
+	animation: simpleFloat 2s ease-in-out infinite;
 }
 
 @keyframes simpleFloat {
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
+	0%,
+	100% {
+		transform: translateY(0px);
+	}
+	50% {
+		transform: translateY(-10px);
+	}
 }
 
 .opening-text {
-  font-size: 1.5em;
-  color: var(--text-main);
-  margin-top: 20px;
-  animation: simpleFade 1.5s ease-in-out infinite;
+	font-size: 1.5em;
+	color: var(--text-main);
+	margin-top: 20px;
+	animation: simpleFade 1.5s ease-in-out infinite;
 }
 
 @keyframes simpleFade {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.6;
-  }
+	0%,
+	100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.6;
+	}
 }
 
 .cards-reveal {
-  display: none;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: var(--gap-main);
-  margin-top: 20px;
-  transition: opacity 0.5s ease;
+	display: none;
+	grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+	gap: var(--gap-main);
+	margin-top: 20px;
+	transition: opacity 0.5s ease;
 }
 
 .cards-reveal.active {
-  display: grid;
+	display: grid;
 }
 
 /* Pokemon Cards */
 .pokemon-card {
-  background-color: var(--glass);
-  box-shadow: var(--card-shadow);
-  border-radius: var(--radius);
-  padding: var(--gap-main);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: var(--text-main);
-  transition: all 0.3s ease;
-  animation: cardFadeIn 0.5s ease-out forwards;
-  opacity: 0;
-  transform: rotateY(180deg);
+	background-color: var(--glass);
+	box-shadow: var(--card-shadow);
+	border-radius: var(--radius);
+	padding: var(--gap-main);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	color: var(--text-main);
+	transition: all 0.3s ease;
+	animation: cardFadeIn 0.5s ease-out forwards;
+	opacity: 0;
+	transform: rotateY(180deg);
 }
 
 .pokemon-card:hover {
-  transform: translateY(-5px) scale(1.05);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+	transform: translateY(-5px) scale(1.05);
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
 @keyframes cardFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 .pokemon-card img {
-  width: 100%;
-  height: 120px;
-  object-fit: contain;
-  margin-bottom: 10px;
+	width: 100%;
+	height: 120px;
+	object-fit: contain;
+	margin-bottom: 10px;
 }
 
 .pokemon-card h4 {
-  color: var(--text-main);
-  margin-bottom: 5px;
-  text-transform: capitalize;
+	color: var(--text-main);
+	margin-bottom: 5px;
+	text-transform: capitalize;
 }
 
 .pokemon-type {
-  display: inline-block;
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 0.8em;
-  color: white;
-  margin: 2px;
-  text-transform: capitalize;
-  background-color: #b887b1;
+	display: inline-block;
+	padding: 4px 8px;
+	border-radius: 12px;
+	font-size: 0.8em;
+	color: white;
+	margin: 2px;
+	text-transform: capitalize;
+	background-color: #b887b1;
 }
 
 /* Collection Section */
 .collection-stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: var(--gap-main);
-  margin-bottom: var(--gap-main);
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	gap: var(--gap-main);
+	margin-bottom: var(--gap-main);
 }
 
 .stat-card {
-  background-color: var(--glass);
-  box-shadow: var(--card-shadow);
-  border-radius: var(--radius);
-  padding: var(--gap-main);
-  text-align: center;
-  color: var(--text-main);
+	background-color: var(--glass);
+	box-shadow: var(--card-shadow);
+	border-radius: var(--radius);
+	padding: var(--gap-main);
+	text-align: center;
+	color: var(--text-main);
 }
 
 .stat-card h3 {
-  color: var(--text-main);
-  margin-bottom: 10px;
+	color: var(--text-main);
+	margin-bottom: 10px;
 }
 
 .stat-card span {
-  font-size: 2em;
-  font-weight: bold;
-  color: #b887b1;
+	font-size: 2em;
+	font-weight: bold;
+	color: #b887b1;
 }
 
 .collection-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: var(--gap-main);
-  padding: 1em;
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	gap: var(--gap-main);
+	padding: 1em;
 }
 
 /* Colores para tipos de Pokémon */
 .type-normal {
-  background-color: #a8a878;
+	background-color: #a8a878;
 }
 .type-fire {
-  background-color: #f08030;
+	background-color: #f08030;
 }
 .type-water {
-  background-color: #6890f0;
+	background-color: #6890f0;
 }
 .type-electric {
-  background-color: #f8d030;
+	background-color: #f8d030;
 }
 .type-grass {
-  background-color: #78c850;
+	background-color: #78c850;
 }
 .type-ice {
-  background-color: #98d8d8;
+	background-color: #98d8d8;
 }
 .type-fighting {
-  background-color: #c03028;
+	background-color: #c03028;
 }
 .type-poison {
-  background-color: #a040a0;
+	background-color: #a040a0;
 }
 .type-ground {
-  background-color: #e0c068;
+	background-color: #e0c068;
 }
 .type-flying {
-  background-color: #a890f0;
+	background-color: #a890f0;
 }
 .type-psychic {
-  background-color: #f85888;
+	background-color: #f85888;
 }
 .type-bug {
-  background-color: #a8b820;
+	background-color: #a8b820;
 }
 .type-rock {
-  background-color: #b8a038;
+	background-color: #b8a038;
 }
 .type-ghost {
-  background-color: #705898;
+	background-color: #705898;
 }
 .type-dragon {
-  background-color: #7038f8;
+	background-color: #7038f8;
 }
 .type-dark {
-  background-color: #705848;
+	background-color: #705848;
 }
 .type-steel {
-  background-color: #b8b8d0;
+	background-color: #b8b8d0;
 }
 .type-fairy {
-  background-color: #ee99ac;
+	background-color: #ee99ac;
 }
-
-
 
 /* Media Queries */
 @media (max-width: 767px) {
-  .container {
-    padding: 10px;
-  }
+	.container {
+		padding: 10px;
+	}
 
-  header h1 {
-    font-size: 2em;
-  }
+	header h1 {
+		font-size: 2em;
+	}
 
-  .packs-container {
-    margin-top: 2em;
-    gap: 2em;
-    padding: 1em;
-  }
+	.packs-container {
+		margin-top: 2em;
+		gap: 2em;
+		padding: 1em;
+	}
 
-  .packs-grid {
-    grid-template-columns: 1fr;
-    gap: var(--gap-main);
-  }
+	.packs-grid {
+		grid-template-columns: 1fr;
+		gap: var(--gap-main);
+	}
 
-  .pack-card {
-    width: 100%;
-    height: 50vh;
-    min-width: 0;
-    box-sizing: border-box;
-    margin: 0;
-  }
+	.pack-card {
+		width: 100%;
+		height: 50vh;
+		min-width: 0;
+		box-sizing: border-box;
+		margin: 0;
+	}
 
-  .modal-content {
-    padding: 20px;
-    margin: 20px;
-  }
+	.modal-content {
+		padding: 20px;
+		margin: 20px;
+	}
 
-  .cards-reveal {
-    grid-template-columns: repeat(2, 1fr);
-  }
+	.cards-reveal {
+		grid-template-columns: repeat(2, 1fr);
+	}
 
-  .collection-grid {
-    grid-template-columns: repeat(2, 1fr);
-    padding: 1em;
-  }
+	.collection-grid {
+		grid-template-columns: repeat(2, 1fr);
+		padding: 1em;
+	}
 
-  .tabs {
-    flex-wrap: wrap;
-    gap: 0.5em;
-  }
+	.tabs {
+		flex-wrap: wrap;
+		gap: 0.5em;
+	}
 
-  .tab-btn {
-    padding: 0.6em 1em;
-    font-size: 0.9em;
-  }
+	.footer-links {
+		flex-direction: column;
+		gap: 5px;
+	}
+
+	.tab-btn {
+		padding: 0.6em 1em;
+		font-size: 0.9em;
+	}
 }
 
 /* Efectos hover para tipos */
 @keyframes tipoHoverEffect {
-  0% {
-    transform: scale(1);
-    background-color: #b887b1;
-    box-shadow: none;
-  }
-  100% {
-    transform: scale(1.1);
-    background-color: #a5c299;
-    box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
-  }
+	0% {
+		transform: scale(1);
+		background-color: #b887b1;
+		box-shadow: none;
+	}
+	100% {
+		transform: scale(1.1);
+		background-color: #a5c299;
+		box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+	}
 }
 
 .pokemon-type:hover {
-  animation: tipoHoverEffect 0.3s forwards;
-  cursor: pointer;
+	animation: tipoHoverEffect 0.3s forwards;
+	cursor: pointer;
 }
 
 .pokemon-type.activo {
-  background-color: #b887b1;
-  color: white;
-  transform: scale(1.1);
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+	background-color: #b887b1;
+	color: white;
+	transform: scale(1.1);
+	box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
 }
-
